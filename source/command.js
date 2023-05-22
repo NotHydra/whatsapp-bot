@@ -5,17 +5,17 @@ const dependency = new Dependency();
 export class Command {
     constructor() {
         this.everyone = async (message, chat, client) => {
-            let text = "";
-            let mentionArray = [];
+            let textArray = [];
+            let mentionArray =  await Promise.all(
+                await chat.participants.map(async (participantObject, participantIndex) => {    
+                    const contact = await client.getContactById(participantObject.id._serialized);
 
-            for (let participantObject of chat.participants) {
-                const contact = await client.getContactById(participantObject.id._serialized);
-
-                mentionArray.push(contact);
-                text += `@${participantObject.id.user} `;
-            }
-
-            await message.reply(text, undefined, { mentions: mentionArray });
+                    textArray.push(`${participantIndex + 1}. @${participantObject.id.user}`);
+                    return contact;
+                })
+            );
+            
+            await message.reply(textArray.join("\n"), undefined, { mentions: mentionArray });
         };
 
         this.credit = async (message) => {
