@@ -1,0 +1,18 @@
+{
+  "name": "whatsapp-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/NotHydra/Whatsapp-Bot",
+  "author": "Rizky Irswanda <86897187+NotHydra@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node source/app.js",
+    "dev": "yarn nodemon source/app.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "nodemon": "^2.0.22",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.20.0"
+  }
+}
