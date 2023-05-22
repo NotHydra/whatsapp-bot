@@ -9,7 +9,7 @@
     "start": "node source/app.js",
     "dev": "yarn nodemon source/app.js"
   },
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "nodemon": "^2.0.22",
     "qrcode-terminal": "^0.12.0",

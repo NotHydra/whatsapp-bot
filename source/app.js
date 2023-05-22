@@ -1,16 +1,13 @@
-import whatsapp from "whatsapp-web.js";
-import qrcode from "qrcode-terminal";
+const { Client, LocalAuth } = require("whatsapp-web.js");
+const qrcode = require("qrcode-terminal");
 
-import { Command } from "./command.js";
-
-const { Client, LocalAuth } = whatsapp;
-const { generate } = qrcode;
+const { Command } = require("./command");
 
 const client = new Client({ authStrategy: new LocalAuth() });
 const command = new Command();
 
 client.on("qr", (qr) => {
-    generate(qr, { small: true });
+    qrcode.generate(qr, { small: true });
 });
 
 client.on("ready", () => {
@@ -26,6 +23,10 @@ client.on("message", async (message) => {
         if (chat.isGroup) {
             if (splittedMessage[1] == "everyone") {
                 await command.everyone(message, chat, client);
+            } else if (splittedMessage[1] == "hi") {
+                await command.hi(message);
+            } else if (splittedMessage[1] == "hello") {
+                await command.hello(message);
             } else if (splittedMessage[1] == "credit") {
                 await command.credit(message);
             } else if (splittedMessage[1] == "help") {
