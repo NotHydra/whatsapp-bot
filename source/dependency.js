@@ -1,32 +1,13 @@
+require('dotenv').config();
+
 class Dependency {
     constructor() {
-        this.commandArray = [
-            {
-                id: 1,
-                command: "everyone",
-                description: "mentions every member",
-            },
-            {
-                id: 2,
-                command: "hi",
-                description: "reply with hello",
-            },
-            {
-                id: 3,
-                command: "hello",
-                description: "reply with hi",
-            },
-            {
-                id: 4,
-                command: "credit",
-                description: "creator's social media",
-            },
-            {
-                id: 5,
-                command: "help",
-                description: "list all command",
-            },
-        ];
+        this.dbHost = process.env.DB_HOST;
+        this.dbUser = process.env.DB_USER;
+        this.dbPort = process.env.DB_PORT;
+        this.dbPassword = process.env.DB_PASSWORD;
+        this.dbDatabase = process.env.DB_DATABASE;
+
     }
 }
 

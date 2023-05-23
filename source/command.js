@@ -1,6 +1,4 @@
-const { Dependency } = require("./dependency");
-
-const dependency = new Dependency();
+const { databaseClient } = require("./database");
 
 class Command {
     constructor() {
@@ -31,13 +29,11 @@ class Command {
         };
 
         this.help = async (message) => {
-            await message.reply(
-                dependency.commandArray
-                    .map((commandObject) => {
-                        return `${commandObject.command}: ${commandObject.description}`;
-                    })
-                    .join("\n")
-            );
+            databaseClient.query("SELECT * FROM command ORDER BY id ASC;", async (err, res) => {
+                await message.reply(
+                    res.rows.map((commandObject) => { return `${commandObject.command}: ${commandObject.description}`; }).join("\n\n")
+                );
+            })
         };
 
         this.test = async (message, chat, client) => {
