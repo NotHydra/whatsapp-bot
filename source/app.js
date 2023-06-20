@@ -17,13 +17,14 @@ client.on("ready", () => {
 client.on("message", async (message) => {
     const splittedMessage = message.body.split(" ");
 
-    if (splittedMessage.length == 1) {
-        await command.help(message);
-    } else if (splittedMessage[0] == "!its") {
+    if (splittedMessage[0] == "!its") {
         const chat = await message.getChat();
 
         if (chat.isGroup) {
-            if (splittedMessage[1] == "everyone") {
+            
+            if (splittedMessage.length == 1) {
+                await command.help(message);
+            } else if (splittedMessage[1] == "everyone") {
                 await command.everyone(message, chat, client);
             } else if (splittedMessage[1] == "credit") {
                 await command.credit(message);
@@ -36,11 +37,8 @@ client.on("message", async (message) => {
     }
 });
 
-client.on("group_join", async (notification) => {
-    const contact = await notification.getContact();
-    notification.reply(`Selamat datang @${contact.id.user}`, {
-        mentions: [contact],
-    });
+client.on("group_join", (notification) => {
+    notification.reply("Selamat datang, mahasiswa baru jalur SNBP atau SNBT!");
 });
 
 client.initialize();
