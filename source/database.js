@@ -1,17 +1,17 @@
-const { Client } = require("pg");
+// const { Client } = require("pg");
 
-const { Dependency } = require("./dependency");
+// const { Dependency } = require("./dependency");
 
-const dependency = new Dependency();
+// const dependency = new Dependency();
 
-const databaseClient = new Client({
-    host: dependency.dbHost,
-    user: dependency.dbUser,
-    port: dependency.dbPort,
-    password: dependency.dbPassword,
-    database: dependency.dbDatabase
-})
+// const databaseClient = new Client({
+//     host: dependency.dbHost,
+//     user: dependency.dbUser,
+//     port: dependency.dbPort,
+//     password: dependency.dbPassword,
+//     database: dependency.dbDatabase
+// })
 
-databaseClient.connect();
+// databaseClient.connect();
 
-module.exports = { databaseClient }
+// module.exports = { databaseClient }

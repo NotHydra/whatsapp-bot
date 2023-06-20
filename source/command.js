@@ -1,4 +1,8 @@
-const { databaseClient } = require("./database");
+// const { databaseClient } = require("./database");
+
+const { Dependency } = require("./dependency");
+
+const dependency = new Dependency();
 
 class Command {
     constructor() {
@@ -16,34 +20,36 @@ class Command {
             await message.reply(textArray.join("\n"), undefined, { mentions: mentionArray });
         };
 
-        this.hi = async (message) => {
-            await message.reply("Hello!")
-        };
-
-        this.hello = async (message) => {
-            await message.reply("Hi!")
-        };
-
         this.credit = async (message) => {
             await message.reply("Credit: https://www.instagram.com/rz_irswanda/");
         };
 
         this.help = async (message) => {
-            databaseClient.query("SELECT * FROM command ORDER BY id ASC;", async (err, res) => {
-                await message.reply(
-                    res.rows.map((commandObject) => { return `${commandObject.command}: ${commandObject.description}`; }).join("\n\n")
-                );
-            })
+            // databaseClient.query("SELECT * FROM command ORDER BY id ASC;", async (err, res) => {
+            //     await message.reply(
+            //         res.rows
+            //             .map((commandObject) => {
+            //                 return `${commandObject.command}: ${commandObject.description}`;
+            //             })
+            //             .join("\n\n")
+            //     );
+            // });
+
+            const helpText = ["!its <command>"];
+
+            dependency.commandArray.forEach((commandObject) => {
+                helpText.push(`${commandObject.command}: ${commandObject.description}`);
+            });
+
+            await message.reply(helpText.join("\n\n"));
         };
 
         this.test = async (message, chat, client) => {
             await this.everyone(message, chat, client);
-            await this.hi(message);
-            await this.hello(message);
             await this.credit(message);
             await this.help(message);
         };
     }
 }
 
-module.exports = { Command }
+module.exports = { Command };
