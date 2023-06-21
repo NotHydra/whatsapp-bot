@@ -19,9 +19,7 @@ client.on("ready", () => {
 client.on("message", async (message) => {
     const splittedMessage = message.body.split(" ");
 
-    if (splittedMessage.length == 1) {
-        await command.help(message);
-    } else if (dependency.prefixArray.includes(splittedMessage[0])) {
+    if (dependency.prefixArray.includes(splittedMessage[0])) {
         const chat = await message.getChat();
 
         if (chat.isGroup) {

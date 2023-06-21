@@ -1,6 +1,6 @@
 class Dependency {
     constructor() {
-        this.prefixArray = ["its", "itk", "if"]
+        this.prefixArray = ["!its", "!itk", "!if"]
         
         this.commandArray = [
             {
