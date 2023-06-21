@@ -1,9 +1,7 @@
 class Dependency {
     constructor() {
         this.botContact = "628971252551@c.us";
-        this.adminArray = ["6281351419966@c.us"];
-        this.defaultPrefixArray = ["!hyd", "!hydra", "!if", "!informatika"];
-        this.whitelistArray = ["120363160523723298@g.us"];
+        this.prefixArray = ["!hyd", "!hydra", "!if", "!informatika"];
 
         this.commandArray = [
             {

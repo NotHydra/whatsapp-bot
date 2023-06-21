@@ -1,5 +1,3 @@
-// const { databaseClient } = require("./database");
-
 const { Dependency } = require("./dependency");
 
 const dependency = new Dependency();
@@ -27,17 +25,7 @@ class Command {
         };
 
         this.help = async (message) => {
-            // databaseClient.query("SELECT * FROM command ORDER BY id ASC;", async (err, res) => {
-            //     await message.reply(
-            //         res.rows
-            //             .map((commandObject) => {
-            //                 return `${commandObject.command}: ${commandObject.description}`;
-            //             })
-            //             .join("\n\n")
-            //     );
-            // });
-
-            const helpText = ["!itk <command>"];
+            const helpText = ["!<prefix> <command>"];
 
             dependency.commandArray.forEach((commandObject) => {
                 helpText.push(`${commandObject.command}: ${commandObject.description}`);
