@@ -19,10 +19,8 @@ client.on("ready", () => {
 client.on("message", async (message) => {
     const splittedMessage = message.body.split(" ");
 
-    if (dependency.prefixArray.includes(splittedMessage[0])) {
-        const chat = await message.getChat();
-
-        if (chat.isGroup) {
+    if (dependency.defaultPrefixArray.includes(splittedMessage[0])) {
+        if (dependency.adminArray.includes(message.author) || dependency.whitelistArray.includes(message.from)) {
             if (splittedMessage.length == 1) {
                 await command.help(message);
             } else if (splittedMessage[1] == "everyone") {
@@ -31,8 +29,23 @@ client.on("message", async (message) => {
                 await command.credit(message);
             } else if (splittedMessage[1] == "help") {
                 await command.help(message);
-            } else if (splittedMessage[1] == "test") {
+            } else if (splittedMessage[1] == "test" && dependency.adminArray.includes(message.author)) {
                 await command.test(message, chat, client);
+            } else if (splittedMessage[1] == "group" && dependency.adminArray.includes(message.author)) {
+                if (splittedMessage[2] == "initialize") {
+                    dependency.whitelistArray.push(message.from);
+
+                    await message.reply("Bot Initialized");
+                } else if (splittedMessage[2] == "terminate") {
+                    const whitelistRemoveIndex = dependency.whitelistArray.indexOf(message.from);
+
+                    if (whitelistRemoveIndex != -1) {
+                        dependency.whitelistArray.splice(whitelistRemoveIndex, 1);
+                        await message.reply("Bot Terminated");
+                    } else {
+                        await message.reply("Bot Haven't Been Initialize Yet");
+                    }
+                }
             }
         }
     }
@@ -40,12 +53,10 @@ client.on("message", async (message) => {
 
 client.on("group_join", (notification) => {
     if (dependency.whitelistArray.includes(notification.chatId)) {
-        if (notification.id.participant == dependency.botContact) {
-            notification.reply("Bot Initialized\n\n!itk <command>");
-        } else {
+        if (notification.id.participant != dependency.botContact) {
             notification.reply("Selamat datang, mahasiswa baru jalur SNBP atau SNBT!");
-        };
-    };
+        }
+    }
 });
 
 client.initialize();

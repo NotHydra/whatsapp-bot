@@ -6,7 +6,9 @@ const dependency = new Dependency();
 
 class Command {
     constructor() {
-        this.everyone = async (message, chat, client) => {
+        this.everyone = async (message, client) => {
+            const chat = await message.getChat();
+
             let textArray = [];
             let mentionArray = await Promise.all(
                 await chat.participants.map(async (participantObject, participantIndex) => {
@@ -44,8 +46,8 @@ class Command {
             await message.reply(helpText.join("\n\n"));
         };
 
-        this.test = async (message, chat, client) => {
-            await this.everyone(message, chat, client);
+        this.test = async (message, client) => {
+            await this.everyone(message, client);
             await this.credit(message);
             await this.help(message);
         };
