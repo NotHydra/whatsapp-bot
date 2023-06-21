@@ -39,7 +39,13 @@ client.on("message", async (message) => {
 });
 
 client.on("group_join", (notification) => {
-    notification.reply("Selamat datang, mahasiswa baru jalur SNBP atau SNBT!");
+    if (dependency.whitelistArray.includes(notification.chatId)) {
+        if (notification.id.participant == dependency.botContact) {
+            notification.reply("Bot Initialized\n\n!itk <command>");
+        } else {
+            notification.reply("Selamat datang, mahasiswa baru jalur SNBP atau SNBT!");
+        };
+    };
 });
 
 client.initialize();
