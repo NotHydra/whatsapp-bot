@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "dotenv": "^16.0.3",
+    "mongoose": "^7.3.0",
     "nodemon": "^2.0.22",
     "pg": "^8.11.0",
     "qrcode-terminal": "^0.12.0",
