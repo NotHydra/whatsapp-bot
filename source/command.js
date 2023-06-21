@@ -35,7 +35,7 @@ class Command {
             //     );
             // });
 
-            const helpText = ["!its <command>"];
+            const helpText = ["!itk <command>"];
 
             dependency.commandArray.forEach((commandObject) => {
                 helpText.push(`${commandObject.command}: ${commandObject.description}`);

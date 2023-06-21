@@ -2,8 +2,10 @@ const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
 const { Command } = require("./command");
+const { Dependency } = require("./dependency");
 
 const client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox"] } });
+const dependency = new Dependency();
 const command = new Command();
 
 client.on("qr", (qr) => {
@@ -17,11 +19,12 @@ client.on("ready", () => {
 client.on("message", async (message) => {
     const splittedMessage = message.body.split(" ");
 
-    if (splittedMessage[0] == "!its") {
+    if (splittedMessage.length == 1) {
+        await command.help(message);
+    } else if (dependency.prefixArray.includes(splittedMessage[0])) {
         const chat = await message.getChat();
 
         if (chat.isGroup) {
-            
             if (splittedMessage.length == 1) {
                 await command.help(message);
             } else if (splittedMessage[1] == "everyone") {
