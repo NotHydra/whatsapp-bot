@@ -1,6 +1,5 @@
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
-require("dotenv").config();
 
 const { Dependency } = require("./dependency");
 const { default: mongoose } = require("mongoose");
@@ -17,7 +16,7 @@ client.on("qr", (qr) => {
 });
 
 client.on("ready", async () => {
-    await mongoose.connect(process.env.DB_URI);
+    await mongoose.connect(dependency.dbURI);
     console.log("Bot Connected");
 });
 

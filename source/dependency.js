@@ -1,5 +1,9 @@
+require("dotenv").config();
+
 class Dependency {
     constructor() {
+        this.dbURI = process.env.DB_URI;
+
         this.botContact = "628971252551@c.us";
         this.prefixArray = ["!hyd", "!hydra", "!if", "!informatika"];
 
