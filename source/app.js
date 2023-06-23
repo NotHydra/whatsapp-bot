@@ -46,8 +46,10 @@ client.on("message", async (message) => {
                             await GroupModel.create({
                                 _id: await utility.latestModelId(GroupModel),
                                 remote: message.from,
+                                active: true,
                                 prefix: [],
                                 operator: [],
+                                message: [],
                             });
                             await message.reply("Bot Initialized");
                         } else {
@@ -124,6 +126,72 @@ client.on("message", async (message) => {
                                     }
                                 } else {
                                     await message.reply("Prefix Invalid");
+                                }
+                            } else {
+                                await message.reply("Bot Doens't Exist");
+                            }
+                        }
+                    } else if (splittedMessage[2] == "message") {
+                        if (splittedMessage.length == 3) {
+                            const groupObject = await GroupModel.findOne({ remote: message.from }).select({ message: 1 }).lean();
+
+                            if (groupObject.message.length != 0) {
+                                const textArray = groupObject.message.map((messageObject, messageIndex) => {
+                                    return `${messageIndex + 1}. ${messageObject}`;
+                                });
+
+                                await message.reply(textArray.join("\n"));
+                            } else {
+                                await message.reply("No Message Available");
+                            }
+                        } else if (splittedMessage[3] == "add" && splittedMessage.length >= 5) {
+                            const groupObject = await GroupModel.findOne({ remote: message.from }).select({ message: 1 }).lean();
+                            if (groupObject != null) {
+                                splittedMessage.splice(0, 4);
+                                const groupMessage = splittedMessage.join(" ");
+
+                                const messageExist = groupObject.message.includes(groupMessage);
+                                if (!messageExist) {
+                                    groupObject.message.push(groupMessage);
+                                    await GroupModel.updateOne(
+                                        { remote: message.from },
+                                        {
+                                            message: groupObject.message,
+                                        }
+                                    ).lean();
+                                    await message.reply("Message Added");
+                                } else {
+                                    await message.reply("Message Already Used");
+                                }
+                            } else {
+                                await message.reply("Bot Doens't Exist");
+                            }
+                        } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
+                            const groupObject = await GroupModel.findOne({ remote: message.from }).select({ message: 1 }).lean();
+                            if (groupObject != null) {
+                                splittedMessage.splice(0, 4);
+                                const groupMessage = splittedMessage.join(" ");
+
+                                const messageExist = groupObject.message.includes(groupMessage);
+                                if (messageExist) {
+                                    const messageIndex = groupObject.message.indexOf(groupMessage);
+
+                                    if (messageIndex != -1) {
+                                        groupObject.message.splice(messageIndex, 1);
+
+                                        await GroupModel.updateOne(
+                                            { remote: message.from },
+                                            {
+                                                message: groupObject.message,
+                                            }
+                                        ).lean();
+
+                                        await message.reply("Message Removed");
+                                    } else {
+                                        await message.reply("Message Failed To Be Removed");
+                                    }
+                                } else {
+                                    await message.reply("Message Doesn't Exist");
                                 }
                             } else {
                                 await message.reply("Bot Doens't Exist");
