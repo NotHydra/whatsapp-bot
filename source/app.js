@@ -61,6 +61,31 @@ client.on("message", async (message) => {
                         } else {
                             await message.reply("Bot Doesn't Exist");
                         }
+                    } else if (splittedMessage[2] == "prefix") {
+                        if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
+                            const groupObject = await GroupModel.findOne({ remote: message.from }).select({ prefix: 1 }).lean();
+                            if (groupObject != null) {
+                                if (/^[a-z]+$/.test(splittedMessage[4])) {
+                                    const prefixExist = groupObject.prefix.includes(`!${splittedMessage[4]}`);
+                                    if (!prefixExist) {
+                                        groupObject.prefix.push(`!${splittedMessage[4]}`);
+                                        await GroupModel.updateOne(
+                                            { remote: message.from },
+                                            {
+                                                prefix: groupObject.prefix,
+                                            }
+                                        ).lean();
+                                        await message.reply("Prefix Added");
+                                    } else {
+                                        await message.reply("Prefix Already Used");
+                                    }
+                                } else {
+                                    await message.reply("Prefix Invalid");
+                                }
+                            } else {
+                                await message.reply("Bot Doens't Exist");
+                            }
+                        }
                     }
                 }
             }
