@@ -34,6 +34,16 @@ class Utility {
                 return false;
             }
         };
+
+        this.latestModelId = async (model) => {
+            const modelObject = await model.findOne().select({ _id: 1 }).sort({ _id: -1 }).lean();
+
+            if (modelObject != null) {
+                return modelObject._id + 1;
+            } else {
+                return 1;
+            }
+        };
     }
 }
 
