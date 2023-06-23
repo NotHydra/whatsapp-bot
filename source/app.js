@@ -140,7 +140,7 @@ client.on("message", async (message) => {
                                     return `${messageIndex + 1}. ${messageObject}`;
                                 });
 
-                                await message.reply(textArray.join("\n"));
+                                await message.reply(textArray.join("\n\n"));
                             } else {
                                 await message.reply("No Message Available");
                             }
