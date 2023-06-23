@@ -85,6 +85,37 @@ client.on("message", async (message) => {
                             } else {
                                 await message.reply("Bot Doens't Exist");
                             }
+                        } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
+                            const groupObject = await GroupModel.findOne({ remote: message.from }).select({ prefix: 1 }).lean();
+                            if (groupObject != null) {
+                                if (/^[a-z]+$/.test(splittedMessage[4])) {
+                                    const prefixExist = groupObject.prefix.includes(`!${splittedMessage[4]}`);
+                                    if (prefixExist) {
+                                        const prefixIndex = groupObject.prefix.indexOf(`!${splittedMessage[4]}`);
+
+                                        if (prefixIndex != -1) {
+                                            groupObject.prefix.splice(prefixIndex, 1);
+
+                                            await GroupModel.updateOne(
+                                                { remote: message.from },
+                                                {
+                                                    prefix: groupObject.prefix,
+                                                }
+                                            ).lean();
+
+                                            await message.reply("Prefix Remove");
+                                        } else {
+                                            await message.reply("Prefix Failed To Be Removed");
+                                        }
+                                    } else {
+                                        await message.reply("Prefix Doesn't Exist");
+                                    }
+                                } else {
+                                    await message.reply("Prefix Invalid");
+                                }
+                            } else {
+                                await message.reply("Bot Doens't Exist");
+                            }
                         }
                     }
                 }
