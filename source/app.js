@@ -207,11 +207,13 @@ client.on("message", async (message) => {
 client.on("group_join", async (notification) => {
     if (await utility.groupIsValid(notification.chatId)) {
         if (notification.id.participant != dependency.botContact) {
-            notification.reply("Selamat datang!");
+            const groupObject = await GroupModel.findOne({ remote: notification.chatId }).select({ message: 1 }).lean();
+
+            if (groupObject.message.length >= 1) {
+                await notification.reply(groupObject.message[utility.randomNumber(0, groupObject.message.length)]);
+            }
         }
     }
-
-    console.log();
 });
 
 client.initialize();
