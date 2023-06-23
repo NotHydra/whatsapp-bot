@@ -166,36 +166,6 @@ client.on("message", async (message) => {
                             } else {
                                 await message.reply("Bot Doens't Exist");
                             }
-                        } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
-                            const groupObject = await GroupModel.findOne({ remote: message.from }).select({ message: 1 }).lean();
-                            if (groupObject != null) {
-                                splittedMessage.splice(0, 4);
-                                const groupMessage = splittedMessage.join(" ");
-
-                                const messageExist = groupObject.message.includes(groupMessage);
-                                if (messageExist) {
-                                    const messageIndex = groupObject.message.indexOf(groupMessage);
-
-                                    if (messageIndex != -1) {
-                                        groupObject.message.splice(messageIndex, 1);
-
-                                        await GroupModel.updateOne(
-                                            { remote: message.from },
-                                            {
-                                                message: groupObject.message,
-                                            }
-                                        ).lean();
-
-                                        await message.reply("Message Removed");
-                                    } else {
-                                        await message.reply("Message Failed To Be Removed");
-                                    }
-                                } else {
-                                    await message.reply("Message Doesn't Exist");
-                                }
-                            } else {
-                                await message.reply("Bot Doens't Exist");
-                            }
                         }
                     }
                 }
