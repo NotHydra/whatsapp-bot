@@ -9,11 +9,19 @@ const groupSchema = new Schema({
         type: String,
         required: true,
     },
+    active: {
+        type: Boolean,
+        required: true,
+    },
     prefix: {
         type: [String],
         required: true,
     },
     operator: {
+        type: [String],
+        required: true,
+    },
+    message: {
         type: [String],
         required: true,
     },
