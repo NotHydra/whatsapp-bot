@@ -44,6 +44,10 @@ class Utility {
                 return 1;
             }
         };
+
+        this.randomNumber = (start, end) => {
+            return Math.floor(Math.random() * (end - start) + start);
+        };
     }
 }
 
