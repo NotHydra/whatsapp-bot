@@ -10,12 +10,15 @@
         "start": "node dist/app.js",
         "dev": "nodemon source/app.ts"
     },
-    "devDependencies": {
-        "typescript": "^5.1.3"
-    },
     "dependencies": {
         "nodemon": "^2.0.22",
         "prettier": "^2.8.8",
-        "ts-node": "^10.9.1"
+        "qrcode-terminal": "^0.12.0",
+        "ts-node": "^10.9.1",
+        "whatsapp-web.js": "^1.21.0"
+    },
+    "devDependencies": {
+        "@types/qrcode-terminal": "^0.12.0",
+        "typescript": "^5.1.3"
     }
 }
