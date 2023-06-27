@@ -1,21 +1,21 @@
 {
-  "name": "whatsapp-bot",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/NotHydra/Whatsapp-Bot",
-  "author": "Rizky Irswanda <86897187+NotHydra@users.noreply.github.com>",
-  "license": "MIT",
-  "scripts": {
-    "start": "node source/app.js",
-    "dev": "yarn nodemon source/app.js"
-  },
-  "type": "commonjs",
-  "dependencies": {
-    "dotenv": "^16.0.3",
-    "mongoose": "^7.3.0",
-    "nodemon": "^2.0.22",
-    "pg": "^8.11.0",
-    "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.20.0"
-  }
+    "name": "whatsapp-bot-v2",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/NotHydra/Whatsapp-Bot.git",
+    "author": "NotHydra <rizky.irswanda115@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "build": "yarn tsc",
+        "start": "node dist/app.js",
+        "dev": "nodemon source/app.ts"
+    },
+    "devDependencies": {
+        "typescript": "^5.1.3"
+    },
+    "dependencies": {
+        "nodemon": "^2.0.22",
+        "prettier": "^2.8.8",
+        "ts-node": "^10.9.1"
+    }
 }

@@ -1,6 +1,2 @@
-/.wwebjs_auth
-/node_modules
-/schema/*
-!/schema/.gitkeep
-
-.env
+dist
+node_modules
