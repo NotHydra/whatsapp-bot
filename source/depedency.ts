@@ -3,6 +3,7 @@ import { CommandInterface } from "./common/interface/command";
 require("dotenv").config();
 
 export const dbURI: string = process.env.DB_URI;
+export const dbName: string = process.env.DB_NAME;
 
 export const botContact: string = process.env.BOT_CONTACT;
 export const prefixArray: Array<string> = ["!hyd", "!hydra", "!if", "!informatika"];
