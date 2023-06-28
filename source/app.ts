@@ -1,15 +1,18 @@
-import { Client, LocalAuth, Message } from "whatsapp-web.js";
+import { Client, GroupNotification, LocalAuth, Message } from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
-import mongoose from "mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
 
-import { dbURI } from "./depedency";
-import { isAdmin, groupIsValid, prefixIsValid } from "./utility";
+import { botContact, dbURI } from "./depedency";
+import { isAdmin, groupIsValid, prefixIsValid, randomNumber } from "./utility";
 
 import { generalHelp, generalEveryone, generalCredit, generalTest } from "./command/general";
 
 import { groupInitialize, groupTerminate } from "./command/group";
 import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
 import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
+
+import { GroupModel } from "./model";
+import { GroupInterface } from "./common/interface/group";
 
 const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox"] } });
 
@@ -67,16 +70,16 @@ client.on("message", async (message: Message): Promise<void> => {
     }
 });
 
-// client.on("group_join", async (notification) => {
-//     if (await utility.groupIsValid(notification.chatId)) {
-//         if (notification.id.participant != dependency.botContact) {
-//             const groupObject = await GroupModel.findOne({ remote: notification.chatId }).select({ message: 1 }).lean();
+client.on("group_join", async (notification: GroupNotification | any): Promise<void> => {
+    if (await groupIsValid(notification.chatId)) {
+        if (notification.id.participant != botContact) {
+            const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: notification.chatId }).select({ message: 1 }).lean();
 
-//             if (groupObject.message.length >= 1) {
-//                 await notification.reply(groupObject.message[utility.randomNumber(0, groupObject.message.length)]);
-//             }
-//         }
-//     }
-// });
+            if (groupObject.message.length >= 1) {
+                await notification.reply(groupObject.message[randomNumber(0, groupObject.message.length)]);
+            }
+        }
+    }
+});
 
 client.initialize();
