@@ -8,6 +8,7 @@
     "scripts": {
         "build": "yarn tsc",
         "start": "node dist/app.js",
+        "start-ts": "yarn run build && yarn run start",
         "dev": "nodemon source/app.ts"
     },
     "dependencies": {

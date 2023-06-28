@@ -1,8 +1,8 @@
 export interface GroupInterface {
-    _id: Number;
-    remote: String;
-    active: Boolean;
-    prefix: Array<String>;
-    operator: Array<String>;
-    message: Array<String>;
+    _id: number;
+    remote: string;
+    active: boolean;
+    prefix: Array<string>;
+    operator: Array<string>;
+    message: Array<string>;
 }
