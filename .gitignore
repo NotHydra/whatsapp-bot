@@ -2,3 +2,5 @@
 .wwebjs_cache
 dist
 node_modules
+
+.env

@@ -11,6 +11,8 @@
         "dev": "nodemon source/app.ts"
     },
     "dependencies": {
+        "dotenv": "^16.3.1",
+        "mongoose": "^7.3.1",
         "nodemon": "^2.0.22",
         "prettier": "^2.8.8",
         "qrcode-terminal": "^0.12.0",
