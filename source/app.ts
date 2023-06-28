@@ -27,41 +27,44 @@ client.on("ready", async (): Promise<void> => {
 
 client.on("message", async (message: Message): Promise<void> => {
     const splittedMessage: Array<string> = message.body.split(" ");
-    const isAdminValue: boolean = await isAdmin(message.author);
 
-    if (isAdminValue || (await groupIsValid(message.from))) {
-        if (await prefixIsValid(message.from, splittedMessage[0])) {
-            if (splittedMessage.length == 1) {
-                await generalHelp(message);
-            } else if (splittedMessage[1] == "everyone") {
-                await generalEveryone(message, client);
-            } else if (splittedMessage[1] == "credit") {
-                await generalCredit(message);
-            } else if (splittedMessage[1] == "help") {
-                await generalHelp(message);
-            } else if (isAdminValue) {
-                if (splittedMessage[1] == "test") {
-                    await generalTest(message, client);
-                } else if (splittedMessage[1] == "group") {
-                    if (splittedMessage[2] == "initialize") {
-                        groupInitialize(message);
-                    } else if (splittedMessage[2] == "terminate") {
-                        groupTerminate(message);
-                    } else if (splittedMessage[2] == "prefix") {
-                        if (splittedMessage.length == 3) {
-                            groupPrefixShow(message);
-                        } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
-                            groupPrefixAdd(message, splittedMessage[4]);
-                        } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
-                            groupPrefixRemove(message, splittedMessage[4]);
-                        }
-                    } else if (splittedMessage[2] == "message") {
-                        if (splittedMessage.length == 3) {
-                            groupMessageShow(message);
-                        } else if (splittedMessage[3] == "add" && splittedMessage.length >= 5) {
-                            groupMessageAdd(message, splittedMessage);
-                        } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
-                            groupMessageRemove(message, splittedMessage);
+    if (splittedMessage[0].includes("!")) {
+        const isAdminValue: boolean = await isAdmin(message.author);
+
+        if (isAdminValue || (await groupIsValid(message.from))) {
+            if (await prefixIsValid(message.from, splittedMessage[0])) {
+                if (splittedMessage.length == 1) {
+                    await generalHelp(message);
+                } else if (splittedMessage[1] == "everyone") {
+                    await generalEveryone(message, client);
+                } else if (splittedMessage[1] == "credit") {
+                    await generalCredit(message);
+                } else if (splittedMessage[1] == "help") {
+                    await generalHelp(message);
+                } else if (isAdminValue) {
+                    if (splittedMessage[1] == "test") {
+                        await generalTest(message, client);
+                    } else if (splittedMessage[1] == "group") {
+                        if (splittedMessage[2] == "initialize") {
+                            groupInitialize(message);
+                        } else if (splittedMessage[2] == "terminate") {
+                            groupTerminate(message);
+                        } else if (splittedMessage[2] == "prefix") {
+                            if (splittedMessage.length == 3) {
+                                groupPrefixShow(message);
+                            } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
+                                groupPrefixAdd(message, splittedMessage[4]);
+                            } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
+                                groupPrefixRemove(message, splittedMessage[4]);
+                            }
+                        } else if (splittedMessage[2] == "message") {
+                            if (splittedMessage.length == 3) {
+                                groupMessageShow(message);
+                            } else if (splittedMessage[3] == "add" && splittedMessage.length >= 5) {
+                                groupMessageAdd(message, splittedMessage);
+                            } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
+                                groupMessageRemove(message, splittedMessage);
+                            }
                         }
                     }
                 }
