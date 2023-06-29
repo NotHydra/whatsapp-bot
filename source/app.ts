@@ -28,9 +28,8 @@ client.on("ready", async (): Promise<void> => {
 client.on("message", async (message: Message): Promise<void> => {
     if (message.body[0] == "!") {
         const isAdminValue: boolean = await isAdmin(message.author);
-        const splittedMessage: Array<string> = message.body.split(" ");
-
         if (isAdminValue || (await groupIsValid(message.from))) {
+            const splittedMessage: Array<string> = message.body.split(" ");
             if (await prefixIsValid(message.from, splittedMessage[0])) {
                 if (splittedMessage.length == 1) {
                     await generalHelp(message);
