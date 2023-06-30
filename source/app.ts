@@ -1,4 +1,4 @@
-import { Chat, Client, GroupNotification, LocalAuth, Message } from "whatsapp-web.js";
+import { Chat, Client, Contact, GroupNotification, LocalAuth, Message } from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
 import mongoose, { HydratedDocument } from "mongoose";
 
@@ -78,9 +78,16 @@ client.on("group_join", async (notification: GroupNotification | any): Promise<v
 
             if (groupObject.message.length >= 1) {
                 const chat: Chat = await notification.getChat();
+                const textArray: Array<string> = [];
+                const mentionArray: Array<Contact> = await Promise.all(
+                    notification.recipientIds.map(async (recipientObject: string) => {
+                        textArray.push(`@${recipientObject.slice(0, -5)}`);
+                        return await client.getContactById(recipientObject);
+                    })
+                );
 
-                await chat.sendMessage(`@${notification.id.participant.slice(0, -5)}\n\n${groupObject.message[randomNumber(0, groupObject.message.length)]}`, {
-                    mentions: [await client.getContactById(notification.id.participant)],
+                await chat.sendMessage(`${textArray.join("\n")}\n\n${groupObject.message[randomNumber(0, groupObject.message.length)]}`, {
+                    mentions: mentionArray,
                 });
             }
         }
