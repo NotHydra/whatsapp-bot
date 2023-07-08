@@ -30,7 +30,7 @@ const importData = async (): Promise<void> => {
 
 (async (): Promise<void> => {
     await mongoose.connect(dbURI).then(async (): Promise<void> => {
-        exportData();
+        // exportData();
         // importData();
 
         console.log("Done");

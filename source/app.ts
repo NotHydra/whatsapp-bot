@@ -126,9 +126,9 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
                     })
                 );
 
-                // await chat.sendMessage(`${textArray.join("\n")}\n\n${groupObject.message[randomNumber(0, groupObject.message.length)]}`, {
-                //     mentions: mentionArray,
-                // });
+                await chat.sendMessage(`${textArray.join("\n")}\n\n${groupObject.message[randomNumber(0, groupObject.message.length)]}`, {
+                    mentions: mentionArray,
+                });
             }
         }
     }
