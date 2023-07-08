@@ -23,7 +23,7 @@ export const generalEveryone = async (message: Message, client: Client): Promise
 
 export const generalCredit = async (message: Message): Promise<void> => {
     await message.reply(
-        "Credit\nWebsite: irswanda.com\nInstagram: www.instagram.com/rz_irswanda\nLinkedIn: www.linkedin.com/in/rizky-irswanda-b068b621\nEmail: rizky.irswanda115@gmail.com"
+        "Website: irswanda.com\n\nInstagram: instagram.com/rz_irswanda\n\nLinkedIn: www.linkedin.com/in/rizky-irswanda-b068b6216\n\nEmail: rizky.irswanda115@gmail.com"
     );
 };
 
