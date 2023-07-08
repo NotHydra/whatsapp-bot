@@ -1,4 +1,4 @@
-import { Chat, Client, Contact, GroupNotification, LocalAuth, Message } from "whatsapp-web.js";
+import { Chat, Client, Contact, LocalAuth, Message } from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
 import mongoose, { HydratedDocument } from "mongoose";
 
@@ -13,6 +13,7 @@ import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command
 
 import { GroupModel } from "./model";
 import { GroupInterface } from "./common/interface/group";
+import { GroupNotificationExtended } from "./common/interface/group-notification";
 
 const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox"] } });
 
@@ -71,7 +72,7 @@ client.on("message", async (message: Message): Promise<void> => {
     }
 });
 
-client.on("group_join", async (notification: GroupNotification | any): Promise<void> => {
+client.on("group_join", async (notification: GroupNotificationExtended): Promise<void> => {
     if (await groupIsValid(notification.chatId)) {
         if (notification.id.participant != botContact) {
             const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: notification.chatId }).select({ message: 1 }).lean();
@@ -80,7 +81,7 @@ client.on("group_join", async (notification: GroupNotification | any): Promise<v
                 const chat: Chat = await notification.getChat();
                 const textArray: Array<string> = [];
                 const mentionArray: Array<Contact> = await Promise.all(
-                    notification.recipientIds.map(async (recipientObject: string) => {
+                    notification.recipientIds.map(async (recipientObject: string): Promise<Contact> => {
                         textArray.push(`@${recipientObject.slice(0, -5)}`);
                         return await client.getContactById(recipientObject);
                     })

@@ -8,7 +8,7 @@ import { GroupModel } from "../../../model";
 export const groupPrefixShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ prefix: 1 }).lean();
     if (groupObject.prefix.length != 0) {
-        const textArray: Array<string> = groupObject.prefix.map((prefixObject: string, prefixIndex: number) => {
+        const textArray: Array<string> = groupObject.prefix.map((prefixObject: string, prefixIndex: number): string => {
             return `${prefixIndex + 1}. ${prefixObject}`;
         });
 

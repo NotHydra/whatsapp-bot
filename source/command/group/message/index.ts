@@ -9,7 +9,7 @@ import { GroupModel } from "../../../model";
 export const groupMessageShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ message: 1 }).lean();
     if (groupObject.message.length != 0) {
-        const textArray: Array<string> = groupObject.message.map((messageObject: string, messageIndex: number) => {
+        const textArray: Array<string> = groupObject.message.map((messageObject: string, messageIndex: number): string => {
             return `${messageIndex + 1}. ${messageObject}`;
         });
 

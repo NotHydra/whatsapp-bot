@@ -1,15 +1,16 @@
-import { Chat, Client, Contact, GroupParticipant, Message } from "whatsapp-web.js";
+import { Client, Contact, GroupParticipant, Message } from "whatsapp-web.js";
 
 import { commandArray } from "../../depedency";
 
 import { CommandInterface } from "../../common/interface/command";
+import { ChatExtended } from "../../common/interface/chat";
 
 export const generalEveryone = async (message: Message, client: Client): Promise<void> => {
-    const chat: Chat | any = await message.getChat();
+    const chat: ChatExtended = await message.getChat();
 
     const textArray: Array<string> = [];
     const mentionArray: Array<Contact> = await Promise.all(
-        await chat.participants.map(async (participantObject: GroupParticipant, participantIndex: number) => {
+        chat.participants.map(async (participantObject: GroupParticipant, participantIndex: number): Promise<Contact> => {
             const contact: Contact = await client.getContactById(participantObject.id._serialized);
 
             textArray.push(`${participantIndex + 1}. @${participantObject.id.user}`);
@@ -21,13 +22,15 @@ export const generalEveryone = async (message: Message, client: Client): Promise
 };
 
 export const generalCredit = async (message: Message): Promise<void> => {
-    await message.reply("Credit: https://www.instagram.com/rz_irswanda/");
+    await message.reply(
+        "Credit\nWebsite: irswanda.com\nInstagram: www.instagram.com/rz_irswanda\nLinkedIn: www.linkedin.com/in/rizky-irswanda-b068b621\nEmail: rizky.irswanda115@gmail.com"
+    );
 };
 
 export const generalHelp = async (message: Message): Promise<void> => {
     const helpText: Array<string> = ["!<prefix> <command>"];
 
-    commandArray.forEach((commandObject: CommandInterface) => {
+    commandArray.forEach((commandObject: CommandInterface): void => {
         helpText.push(`${commandObject.command}: ${commandObject.description}`);
     });
 
