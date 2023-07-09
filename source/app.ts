@@ -3,7 +3,7 @@ import qrcode from "qrcode-terminal";
 import mongoose, { HydratedDocument } from "mongoose";
 
 import { botContact, dbURI } from "./depedency";
-import { isAdmin, groupIsValid, prefixIsValid, randomNumber } from "./utility";
+import { isAdmin, groupIsValid, prefixIsValid, randomNumber, developmentLog } from "./utility";
 
 import { generalHelp, generalEveryone, generalCredit, generalTest } from "./command/general";
 
@@ -11,9 +11,10 @@ import { groupInitialize, groupTerminate } from "./command/group";
 import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
 import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
 
-import { GroupModel } from "./model";
 import { GroupInterface } from "./common/interface/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
+
+import { GroupModel } from "./model";
 
 const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox", "--js-flags='--max_old_space_size=512'"] } });
 
@@ -28,71 +29,71 @@ client.on("ready", async (): Promise<void> => {
 
 client.on("message", async (message: Message): Promise<void> => {
     if (message.body[0] == "!") {
-        console.log("Test 1 1 Exclamation");
+        developmentLog("Test 1 1 Exclamation");
 
         const isAdminValue: boolean = await isAdmin(message.author);
         if (isAdminValue || (await groupIsValid(message.from))) {
-            console.log("Test 1 2 Validation");
+            developmentLog("Test 1 2 Validation");
 
             const splittedMessage: Array<string> = message.body.split(" ");
             if (await prefixIsValid(message.from, splittedMessage[0])) {
-                console.log("Test 1 3 Prefix");
+                developmentLog("Test 1 3 Prefix");
 
                 if (splittedMessage.length == 1) {
-                    console.log("Test 1 A Default");
+                    developmentLog("Test 1 A Default");
 
                     await generalHelp(message);
                 } else if (splittedMessage[1] == "everyone") {
-                    console.log("Test 1 B Everyone");
+                    developmentLog("Test 1 B Everyone");
 
                     await generalEveryone(message, client);
                 } else if (splittedMessage[1] == "credit") {
-                    console.log("Test 1 C Credit");
+                    developmentLog("Test 1 C Credit");
 
                     await generalCredit(message);
                 } else if (splittedMessage[1] == "help") {
-                    console.log("Test 1 D Help");
+                    developmentLog("Test 1 D Help");
 
                     await generalHelp(message);
                 } else if (isAdminValue) {
                     if (splittedMessage[1] == "test") {
-                        console.log("Test 1 E Test");
+                        developmentLog("Test 1 E Test");
 
                         await generalTest(message, client);
                     } else if (splittedMessage[1] == "group") {
                         if (splittedMessage[2] == "initialize") {
-                            console.log("Test 1 F Group Initialize");
+                            developmentLog("Test 1 F Group Initialize");
 
                             groupInitialize(message);
                         } else if (splittedMessage[2] == "terminate") {
-                            console.log("Test 1 G Group Terminate");
+                            developmentLog("Test 1 G Group Terminate");
 
                             groupTerminate(message);
                         } else if (splittedMessage[2] == "prefix") {
                             if (splittedMessage.length == 3) {
-                                console.log("Test 1 H Group Prefix");
+                                developmentLog("Test 1 H Group Prefix");
 
                                 groupPrefixShow(message);
                             } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
-                                console.log("Test 1 I Group Prefix Add");
+                                developmentLog("Test 1 I Group Prefix Add");
 
                                 groupPrefixAdd(message, splittedMessage[4]);
                             } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
-                                console.log("Test 1 J Group Prefix Remove");
+                                developmentLog("Test 1 J Group Prefix Remove");
 
                                 groupPrefixRemove(message, splittedMessage[4]);
                             }
                         } else if (splittedMessage[2] == "message") {
                             if (splittedMessage.length == 3) {
-                                console.log("Test 1 K Group Message");
+                                developmentLog("Test 1 K Group Message");
 
                                 groupMessageShow(message);
                             } else if (splittedMessage[3] == "add" && splittedMessage.length >= 5) {
-                                console.log("Test 1 L Group Message Add");
+                                developmentLog("Test 1 L Group Message Add");
 
                                 groupMessageAdd(message, splittedMessage);
                             } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
-                                console.log("Test 1 K Group Message Remove");
+                                developmentLog("Test 1 K Group Message Remove");
 
                                 groupMessageRemove(message, splittedMessage);
                             }
@@ -103,19 +104,19 @@ client.on("message", async (message: Message): Promise<void> => {
         }
     }
 
-    console.log();
+    developmentLog("");
 });
 
 client.on("group_join", async (notification: GroupNotificationExtended): Promise<void> => {
     if (await groupIsValid(notification.chatId)) {
-        console.log("Test 2 1 Validation");
+        developmentLog("Test 2 1 Validation");
 
         if (notification.id.participant != botContact) {
-            console.log("Test 2 2 Participant");
+            developmentLog("Test 2 2 Participant");
 
             const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: notification.chatId }).select({ message: 1 }).lean();
             if (groupObject.message.length >= 1) {
-                console.log("Test 2 3 Message");
+                developmentLog("Test 2 3 Message");
 
                 const chat: Chat = await notification.getChat();
                 const textArray: Array<string> = [];
@@ -133,7 +134,7 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
         }
     }
 
-    console.log();
+    developmentLog("");
 });
 
 client.initialize();

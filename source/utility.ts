@@ -1,6 +1,6 @@
 import { HydratedDocument, Model } from "mongoose";
 
-import { prefixArray } from "./depedency";
+import { dbName, prefixArray } from "./depedency";
 
 import { GroupInterface } from "./common/interface/group";
 import { ModelIdInterface } from "./common/interface/model";
@@ -49,4 +49,10 @@ export const latestModelId = async <T>(model: Model<T>): Promise<number> => {
 
 export const randomNumber = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min) + min);
+};
+
+export const developmentLog = (text: string): void => {
+    if (dbName == "development") {
+        console.log(text);
+    }
 };
