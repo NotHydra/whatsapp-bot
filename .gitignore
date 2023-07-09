@@ -7,3 +7,4 @@ source/script/json/**/*
 !source/script/json/.gitkeep
 
 .env
+note.txt
