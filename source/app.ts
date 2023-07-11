@@ -16,7 +16,7 @@ import { GroupNotificationExtended } from "./common/interface/group-notification
 
 import { GroupModel } from "./model";
 
-const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox", "--js-flags='--max_old_space_size=512'"] } });
+const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox", "--js-flags='--max_old_space_size=256'"] } });
 
 client.on("qr", (qr: string): void => {
     qrcode.generate(qr, { small: true });
