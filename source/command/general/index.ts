@@ -18,7 +18,13 @@ export const generalEveryone = async (message: Message, client: Client): Promise
         })
     );
 
-    await message.reply(textArray.join("\n"), undefined, { mentions: mentionArray });
+    if (!message.hasQuotedMsg) {
+        await message.reply(textArray.join("\n"), undefined, { mentions: mentionArray });
+    } else {
+        const quotedMessage = await message.getQuotedMessage();
+
+        await quotedMessage.reply(textArray.join("\n"), undefined, { mentions: mentionArray });
+    }
 };
 
 export const generalCredit = async (message: Message): Promise<void> => {
