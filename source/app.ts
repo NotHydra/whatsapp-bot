@@ -102,9 +102,9 @@ client.on("message", async (message: Message): Promise<void> => {
                 }
             }
         }
-    }
 
-    developmentLog("");
+        developmentLog("");
+    }
 });
 
 client.on("group_join", async (notification: GroupNotificationExtended): Promise<void> => {
