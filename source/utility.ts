@@ -2,7 +2,7 @@ import { HydratedDocument, Model } from "mongoose";
 
 import { dbName, prefixArray } from "./depedency";
 
-import { GroupInterface } from "./common/interface/group";
+import { GroupInterface } from "./common/interface/model/group";
 import { ModelIdInterface } from "./common/interface/model";
 
 import { AdminModel, GroupModel } from "./model";
@@ -17,15 +17,15 @@ export const isAdmin = async (contact: string): Promise<boolean> => {
     }
 };
 
-export const prefixIsValid = async (remote: string, value: string): Promise<boolean> => {
-    const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: remote }).select({ prefix: 1 }).lean();
+// export const prefixIsValid = async (remote: string, value: string): Promise<boolean> => {
+//     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: remote }).select({ prefix: 1 }).lean();
 
-    if (groupObject != null) {
-        return prefixArray.includes(value) || groupObject.prefix.includes(value);
-    } else {
-        return prefixArray.includes(value);
-    }
-};
+//     if (groupObject != null) {
+//         return prefixArray.includes(value) || groupObject.prefix.includes(value);
+//     } else {
+//         return prefixArray.includes(value);
+//     }
+// };
 
 export const groupIsValid = async (remote: string): Promise<boolean> => {
     const isExist: ModelIdInterface = await GroupModel.exists({ remote: remote }).lean();

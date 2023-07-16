@@ -4,7 +4,7 @@ import mongoose, { HydratedDocument } from "mongoose";
 import { dbURI } from "../depedency";
 
 import { GroupInterface } from "../common/interface/group";
-import { AdminInterface } from "../common/interface/admin";
+import { AdminInterface } from "../common/interface/model/admin";
 
 import { AdminModel, GroupModel } from "../model";
 

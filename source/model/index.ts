@@ -2,8 +2,8 @@ import { Connection, Model, connection } from "mongoose";
 
 import { dbName } from "../depedency";
 
-import { AdminInterface } from "../common/interface/admin";
-import { GroupInterface } from "../common/interface/group";
+import { AdminInterface } from "../common/interface/model/admin";
+import { GroupInterface } from "../common/interface/model/group";
 
 import { adminSchema } from "./admin";
 import { groupSchema } from "./group";

@@ -1,10 +1,14 @@
 import { Schema } from "mongoose";
 
-import { GroupInterface } from "../common/interface/group";
+import { GroupInterface } from "../common/interface/model/group";
 
 export const groupSchema: Schema = new Schema<GroupInterface>({
     _id: {
         type: Number,
+        required: true,
+    },
+    name: {
+        type: String,
         required: true,
     },
     remote: {
@@ -13,18 +17,6 @@ export const groupSchema: Schema = new Schema<GroupInterface>({
     },
     active: {
         type: Boolean,
-        required: true,
-    },
-    prefix: {
-        type: [String],
-        required: true,
-    },
-    operator: {
-        type: [String],
-        required: true,
-    },
-    message: {
-        type: [String],
         required: true,
     },
 });
