@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 
 import { GroupRoleInterface } from "../common/interface/model/group-role";
 
-export const groupSchema: Schema = new Schema<GroupRoleInterface>({
+export const groupRoleSchema: Schema = new Schema<GroupRoleInterface>({
     _id: {
         type: Number,
         required: true,

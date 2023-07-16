@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 
 import { GroupPrefixInterface } from "../common/interface/model/group-prefix";
 
-export const groupSchema: Schema = new Schema<GroupPrefixInterface>({
+export const groupPrefixSchema: Schema = new Schema<GroupPrefixInterface>({
     _id: {
         type: Number,
         required: true,
