@@ -23,8 +23,9 @@ client.on("qr", (qr: string): void => {
 });
 
 client.on("ready", async (): Promise<void> => {
-    await mongoose.connect(dbURI);
-    console.log("Bot Connected");
+    await mongoose.connect(dbURI).then(() => {
+        console.log("Bot Connected");
+    });
 });
 
 client.on("message", async (message: Message): Promise<void> => {
