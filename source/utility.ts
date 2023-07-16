@@ -5,7 +5,14 @@ import { dbName, prefixArray } from "./depedency";
 import { GroupInterface } from "./common/interface/model/group";
 import { ModelIdInterface } from "./common/interface/model";
 
-import { AdminModel, GroupModel } from "./model";
+import { AdminModel, GroupModel, GroupPrefixModel } from "./model";
+import { GroupPrefixInterface } from "./common/interface/model/group-prefix";
+
+export const includeKey = <T>(array: Array<T>, key: string, value: string): boolean => {
+    return array.some((object: T) => {
+        return object[key as keyof typeof object] == value;
+    });
+};
 
 export const isAdmin = async (contact: string): Promise<boolean> => {
     const isExist: ModelIdInterface = await AdminModel.exists({ contact: contact }).lean();
@@ -17,15 +24,16 @@ export const isAdmin = async (contact: string): Promise<boolean> => {
     }
 };
 
-// export const prefixIsValid = async (remote: string, value: string): Promise<boolean> => {
-//     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: remote }).select({ prefix: 1 }).lean();
+export const prefixIsValid = async (remote: string, value: string): Promise<boolean> => {
+    const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: remote }).select({ _id: 1 }).lean();
+    const groupPrefixArray: Array<HydratedDocument<GroupPrefixInterface>> = await GroupPrefixModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();
 
-//     if (groupObject != null) {
-//         return prefixArray.includes(value) || groupObject.prefix.includes(value);
-//     } else {
-//         return prefixArray.includes(value);
-//     }
-// };
+    if (groupObject != null) {
+        return includeKey(prefixArray, "name", value) || includeKey(groupPrefixArray, "name", value);
+    } else {
+        return includeKey(prefixArray, "name", value);
+    }
+};
 
 export const groupIsValid = async (remote: string): Promise<boolean> => {
     const isExist: ModelIdInterface = await GroupModel.exists({ remote: remote }).lean();
