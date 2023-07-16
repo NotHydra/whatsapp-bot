@@ -3,7 +3,7 @@ import mongoose, { HydratedDocument } from "mongoose";
 
 import { dbURI } from "../depedency";
 
-import { GroupInterface } from "../common/interface/group";
+import { GroupInterface } from "../common/interface/model/group";
 import { AdminInterface } from "../common/interface/model/admin";
 
 import { AdminModel, GroupModel } from "../model";
