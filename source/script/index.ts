@@ -12,7 +12,7 @@ import { GroupRoleMemberInterface } from "../common/interface/model/group-role-m
 import { GroupMessageInterface } from "../common/interface/model/group-message";
 import { GroupExtensionInterface } from "../common/interface/model/group-extension";
 
-import { AdminModel, GroupModel } from "../model";
+import { AdminModel, GroupExtensionModel, GroupMessageModel, GroupModel, GroupOperatorModel, GroupPrefixModel, GroupRoleMemberModel, GroupRoleModel } from "../model";
 
 interface GroupRawInterface {
     _id: number;
@@ -95,11 +95,31 @@ const convertData = async (): Promise<void> => {
     fs.writeFileSync(`source/script/json/convert/group-extension.json`, JSON.stringify(groupExtensionArray, null, 4), "utf8");
 };
 
+const importDataV3 = async (): Promise<void> => {
+    const dataArray: any = [
+        ["source/script/json/convert/admin.json", AdminModel],
+        ["source/script/json/convert/group.json", GroupModel],
+        ["source/script/json/convert/group-operator.json", GroupOperatorModel],
+        ["source/script/json/convert/group-prefix.json", GroupPrefixModel],
+        ["source/script/json/convert/group-role.json", GroupRoleModel],
+        ["source/script/json/convert/group-role-member.json", GroupRoleMemberModel],
+        ["source/script/json/convert/group-message.json", GroupMessageModel],
+        ["source/script/json/convert/group-extension.json", GroupExtensionModel],
+    ];
+
+    dataArray.forEach(async (dataObject: any) => {
+        const jsonArray: string = JSON.parse(fs.readFileSync(dataObject[0], "utf8"));
+        await dataObject[1].deleteMany();
+        await dataObject[1].insertMany(jsonArray);
+    });
+};
+
 (async (): Promise<void> => {
     await mongoose.connect(dbURI).then(async (): Promise<void> => {
         // exportData();
         // importData();
-        convertData();
+        // convertData();
+        importDataV3();
 
         console.log("Done");
     });
