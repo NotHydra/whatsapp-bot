@@ -7,15 +7,15 @@ import { isAdmin, groupIsValid, prefixIsValid, randomNumber, developmentLog } fr
 
 import { generalHelp, generalEveryone, generalCredit, generalTest } from "./command/general";
 
-// import { groupInitialize, groupTerminate } from "./command/group";
-// import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
-// import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
+import { groupInitialize, groupTerminate } from "./command/group";
+import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
+import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
 
 import { GroupInterface } from "./common/interface/model/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
+import { GroupMessageInterface } from "./common/interface/model/group-message";
 
 import { GroupMessageModel, GroupModel } from "./model";
-import { GroupMessageInterface } from "./common/interface/model/group-message";
 
 const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox", "--js-flags='--max_old_space_size=256'"] } });
 
@@ -29,85 +29,85 @@ client.on("ready", async (): Promise<void> => {
     });
 });
 
-// client.on("message", async (message: Message): Promise<void> => {
-//     if (message.body[0] == "!") {
-//         developmentLog("Test 1 1 Exclamation");
+client.on("message", async (message: Message): Promise<void> => {
+    if (message.body[0] == "!") {
+        developmentLog("Test 1 1 Exclamation");
 
-//         const isAdminValue: boolean = await isAdmin(message.author);
-//         if (isAdminValue || (await groupIsValid(message.from))) {
-//             developmentLog("Test 1 2 Validation");
+        const isAdminValue: boolean = await isAdmin(message.author);
+        if (isAdminValue || (await groupIsValid(message.from))) {
+            developmentLog("Test 1 2 Validation");
 
-//             const splittedMessage: Array<string> = message.body.split(" ");
-//             if (await prefixIsValid(message.from, splittedMessage[0])) {
-//                 developmentLog("Test 1 3 Prefix");
+            const splittedMessage: Array<string> = message.body.split(" ");
+            if (await prefixIsValid(message.from, splittedMessage[0])) {
+                developmentLog("Test 1 3 Prefix");
 
-//                 if (splittedMessage.length == 1) {
-//                     developmentLog("Test 1 A Default");
+                if (splittedMessage.length == 1) {
+                    developmentLog("Test 1 A Default");
 
-//                     await generalHelp(message);
-//                 } else if (splittedMessage[1] == "everyone") {
-//                     developmentLog("Test 1 B Everyone");
+                    await generalHelp(message);
+                } else if (splittedMessage[1] == "everyone") {
+                    developmentLog("Test 1 B Everyone");
 
-//                     await generalEveryone(message, client);
-//                 } else if (splittedMessage[1] == "credit") {
-//                     developmentLog("Test 1 C Credit");
+                    await generalEveryone(message, client);
+                } else if (splittedMessage[1] == "credit") {
+                    developmentLog("Test 1 C Credit");
 
-//                     await generalCredit(message);
-//                 } else if (splittedMessage[1] == "help") {
-//                     developmentLog("Test 1 D Help");
+                    await generalCredit(message);
+                } else if (splittedMessage[1] == "help") {
+                    developmentLog("Test 1 D Help");
 
-//                     await generalHelp(message);
-//                 } else if (isAdminValue) {
-//                     if (splittedMessage[1] == "test") {
-//                         developmentLog("Test 1 E Test");
+                    await generalHelp(message);
+                } else if (isAdminValue) {
+                    if (splittedMessage[1] == "test") {
+                        developmentLog("Test 1 E Test");
 
-//                         await generalTest(message, client);
-//                     } else if (splittedMessage[1] == "group") {
-//                         if (splittedMessage[2] == "initialize") {
-//                             developmentLog("Test 1 F Group Initialize");
+                        await generalTest(message, client);
+                    } else if (splittedMessage[1] == "group") {
+                        if (splittedMessage[2] == "initialize" && splittedMessage.length == 4) {
+                            developmentLog("Test 1 F Group Initialize");
 
-//                             groupInitialize(message);
-//                         } else if (splittedMessage[2] == "terminate") {
-//                             developmentLog("Test 1 G Group Terminate");
+                            groupInitialize(message, splittedMessage[3]);
+                        } else if (splittedMessage[2] == "terminate") {
+                            developmentLog("Test 1 G Group Terminate");
 
-//                             groupTerminate(message);
-//                         } else if (splittedMessage[2] == "prefix") {
-//                             if (splittedMessage.length == 3) {
-//                                 developmentLog("Test 1 H Group Prefix");
+                            groupTerminate(message);
+                        } else if (splittedMessage[2] == "prefix") {
+                            if (splittedMessage.length == 3) {
+                                developmentLog("Test 1 H Group Prefix");
 
-//                                 groupPrefixShow(message);
-//                             } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
-//                                 developmentLog("Test 1 I Group Prefix Add");
+                                groupPrefixShow(message);
+                            } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
+                                developmentLog("Test 1 I Group Prefix Add");
 
-//                                 groupPrefixAdd(message, splittedMessage[4]);
-//                             } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
-//                                 developmentLog("Test 1 J Group Prefix Remove");
+                                groupPrefixAdd(message, splittedMessage[4]);
+                            } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
+                                developmentLog("Test 1 J Group Prefix Remove");
 
-//                                 groupPrefixRemove(message, splittedMessage[4]);
-//                             }
-//                         } else if (splittedMessage[2] == "message") {
-//                             if (splittedMessage.length == 3) {
-//                                 developmentLog("Test 1 K Group Message");
+                                groupPrefixRemove(message, splittedMessage[4]);
+                            }
+                        } else if (splittedMessage[2] == "message") {
+                            if (splittedMessage.length == 3) {
+                                developmentLog("Test 1 K Group Message");
 
-//                                 groupMessageShow(message);
-//                             } else if (splittedMessage[3] == "add" && splittedMessage.length >= 5) {
-//                                 developmentLog("Test 1 L Group Message Add");
+                                groupMessageShow(message);
+                            } else if (splittedMessage[3] == "add" && splittedMessage.length >= 5) {
+                                developmentLog("Test 1 L Group Message Add");
 
-//                                 groupMessageAdd(message, splittedMessage);
-//                             } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
-//                                 developmentLog("Test 1 K Group Message Remove");
+                                groupMessageAdd(message, splittedMessage);
+                            } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
+                                developmentLog("Test 1 K Group Message Remove");
 
-//                                 groupMessageRemove(message, splittedMessage);
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
+                                groupMessageRemove(message, splittedMessage);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-//         developmentLog("");
-//     }
-// });
+        developmentLog("");
+    }
+});
 
 client.on("group_join", async (notification: GroupNotificationExtended): Promise<void> => {
     if (await groupIsValid(notification.chatId)) {
