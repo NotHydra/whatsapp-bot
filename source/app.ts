@@ -3,18 +3,19 @@ import qrcode from "qrcode-terminal";
 import mongoose, { HydratedDocument } from "mongoose";
 
 import { botContact, dbURI } from "./depedency";
-// import { isAdmin, groupIsValid, prefixIsValid, randomNumber, developmentLog } from "./utility";
+import { isAdmin, groupIsValid, prefixIsValid, randomNumber, developmentLog } from "./utility";
 
 import { generalHelp, generalEveryone, generalCredit, generalTest } from "./command/general";
 
-import { groupInitialize, groupTerminate } from "./command/group";
-import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
-import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
+// import { groupInitialize, groupTerminate } from "./command/group";
+// import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
+// import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
 
 import { GroupInterface } from "./common/interface/model/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
 
-import { GroupModel } from "./model";
+import { GroupMessageModel, GroupModel } from "./model";
+import { GroupMessageInterface } from "./common/interface/model/group-message";
 
 const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox", "--js-flags='--max_old_space_size=256'"] } });
 
@@ -108,34 +109,35 @@ client.on("ready", async (): Promise<void> => {
 //     }
 // });
 
-// client.on("group_join", async (notification: GroupNotificationExtended): Promise<void> => {
-//     if (await groupIsValid(notification.chatId)) {
-//         developmentLog("Test 2 1 Validation");
+client.on("group_join", async (notification: GroupNotificationExtended): Promise<void> => {
+    if (await groupIsValid(notification.chatId)) {
+        developmentLog("Test 2 1 Validation");
 
-//         if (notification.id.participant != botContact) {
-//             developmentLog("Test 2 2 Participant");
+        if (notification.id.participant != botContact) {
+            developmentLog("Test 2 2 Participant");
 
-//             const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: notification.chatId }).select({ message: 1 }).lean();
-//             if (groupObject.message.length >= 1) {
-//                 developmentLog("Test 2 3 Message");
+            const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: notification.chatId }).select({ _id: 1 }).lean();
+            const groupMessageArray: Array<HydratedDocument<GroupMessageInterface>> = await GroupMessageModel.find({ id_group: groupObject._id }).select({ text: 1 }).lean();
+            if (groupMessageArray.length >= 1) {
+                developmentLog("Test 2 3 Message");
 
-//                 const chat: Chat = await notification.getChat();
-//                 const textArray: Array<string> = [];
-//                 const mentionArray: Array<Contact> = await Promise.all(
-//                     notification.recipientIds.map(async (recipientObject: string): Promise<Contact> => {
-//                         textArray.push(`@${recipientObject.slice(0, -5)}`);
-//                         return await client.getContactById(recipientObject);
-//                     })
-//                 );
+                const chat: Chat = await notification.getChat();
+                const textArray: Array<string> = [];
+                const mentionArray: Array<Contact> = await Promise.all(
+                    notification.recipientIds.map(async (recipientObject: string): Promise<Contact> => {
+                        textArray.push(`@${recipientObject.slice(0, -5)}`);
+                        return await client.getContactById(recipientObject);
+                    })
+                );
 
-//                 await chat.sendMessage(`${textArray.join("\n")}\n\n${groupObject.message[randomNumber(0, groupObject.message.length)]}`, {
-//                     mentions: mentionArray,
-//                 });
-//             }
-//         }
-//     }
+                await chat.sendMessage(`${textArray.join("\n")}\n\n${groupMessageArray[randomNumber(0, groupMessageArray.length)].text}`, {
+                    mentions: mentionArray,
+                });
+            }
+        }
 
-//     developmentLog("");
-// });
+        developmentLog("");
+    }
+});
 
 client.initialize();

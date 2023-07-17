@@ -119,7 +119,7 @@ const importDataV3 = async (): Promise<void> => {
         // exportData();
         // importData();
         // convertData();
-        importDataV3();
+        // importDataV3();
 
         console.log("Done");
     });
