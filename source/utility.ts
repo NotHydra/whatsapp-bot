@@ -3,10 +3,10 @@ import { HydratedDocument, Model } from "mongoose";
 import { dbName, prefixArray } from "./depedency";
 
 import { GroupInterface } from "./common/interface/model/group";
+import { GroupPrefixInterface } from "./common/interface/model/group-prefix";
 import { ModelIdInterface } from "./common/interface/model";
 
 import { AdminModel, GroupModel, GroupPrefixModel } from "./model";
-import { GroupPrefixInterface } from "./common/interface/model/group-prefix";
 
 export const includeKey = <T>(array: Array<T>, key: string, value: string): boolean => {
     return array.some((object: T) => {
