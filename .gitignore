@@ -1,10 +1,11 @@
 .wwebjs_auth
 .wwebjs_cache
+.env
+
 dist
 node_modules
 
 source/script/json/**/*
 !source/script/json/.gitkeep
 
-.env
 note.txt
