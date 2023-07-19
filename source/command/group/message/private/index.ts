@@ -39,7 +39,7 @@ export const groupMessagePrivateActive = async (message: Message, value: string)
                     text: " ",
                 });
 
-                await message.reply("Public Message Activated");
+                await message.reply("Private Message Activated");
             } else {
                 await message.reply("Private Message Already Activated");
             }
@@ -49,7 +49,7 @@ export const groupMessagePrivateActive = async (message: Message, value: string)
                     id_group: groupObject._id,
                 });
 
-                await message.reply("Public Message Deactivated");
+                await message.reply("Private Message Deactivated");
             } else {
                 await message.reply("Private Message Already Deactivated");
             }
