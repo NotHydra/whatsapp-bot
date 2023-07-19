@@ -8,9 +8,10 @@ import { isAdmin, groupIsValid, prefixIsValid, randomNumber, developmentLog } fr
 import { generalHelp, generalEveryone, generalCredit, generalTest } from "./command/general";
 
 import { groupInitialize, groupTerminate } from "./command/group";
-import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
 import { groupOperatorShow, groupOperatorAdd, groupOperatorRemove } from "./command/group/operator";
+import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
 import { groupMessagePublicAdd, groupMessagePublicRemove, groupMessagePublicShow } from "./command/group/message/public";
+import { groupMessagePrivateActive, groupMessagePrivateChange, groupMessagePrivateShow } from "./command/group/message/private";
 
 import { GroupInterface } from "./common/interface/model/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
@@ -123,17 +124,18 @@ client.on("message", async (message: Message): Promise<void> => {
                                 }
                             } else if (splittedMessage[3] == "private") {
                                 if (splittedMessage.length == 4) {
-                                    developmentLog("Test 1 K Group Message Private");
+                                    developmentLog("Test 1 N Group Message Private");
 
                                     groupMessagePrivateShow(message);
-                                } else if (splittedMessage[4] == "add" && splittedMessage.length >= 6) {
-                                    developmentLog("Test 1 L Group Message Private Add");
+                                } else if (splittedMessage[4] == "active" && ["true", "false"].includes(splittedMessage[5])) {
+                                    developmentLog("Test 1 O Group Message Private Active");
 
-                                    groupMessagePrivateAdd(message, splittedMessage);
-                                } else if (splittedMessage[4] == "remove" && splittedMessage.length >= 6) {
-                                    developmentLog("Test 1 M Group Message Private Remove");
+                                    groupMessagePrivateActive(message, splittedMessage[5]);
+                                }
+                                else if (splittedMessage[4] == "change" && splittedMessage.length >= 6) {
+                                    developmentLog("Test 1 P Group Message Private Change");
 
-                                    groupMessagePrivateRemove(message, splittedMessage);
+                                    groupMessagePrivateChange(message, splittedMessage);
                                 }
                             }
                         }
