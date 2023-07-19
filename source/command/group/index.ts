@@ -6,7 +6,7 @@ import { latestModelId } from "../../utility";
 import { ModelIdInterface } from "../../common/interface/model";
 import { GroupRoleInterface } from "../../common/interface/model/group-role";
 
-import { GroupExtensionModel, GroupMessageModel, GroupModel, GroupOperatorModel, GroupPrefixModel, GroupRoleMemberModel, GroupRoleModel } from "../../model";
+import { GroupExtensionModel, GroupMessagePrivateModel, GroupMessagePublicModel, GroupModel, GroupOperatorModel, GroupPrefixModel, GroupRoleMemberModel, GroupRoleModel } from "../../model";
 
 export const groupInitialize = async (message: Message, name: string): Promise<void> => {
     const groupExist: ModelIdInterface = await GroupModel.exists({ remote: message.from }).lean();
@@ -36,7 +36,8 @@ export const groupTerminate = async (message: Message): Promise<void> => {
         await GroupOperatorModel.deleteMany({ id_group: groupExist._id }).lean();
         await GroupPrefixModel.deleteMany({ id_group: groupExist._id }).lean();
         await GroupRoleModel.deleteMany({ id_group: groupExist._id }).lean();
-        await GroupMessageModel.deleteMany({ id_group: groupExist._id }).lean();
+        await GroupMessagePublicModel.deleteMany({ id_group: groupExist._id }).lean();
+        await GroupMessagePrivateModel.deleteMany({ id_group: groupExist._id }).lean();
         await GroupExtensionModel.deleteMany({ id_group: groupExist._id }).lean();
 
         await message.reply("Bot Terminated");

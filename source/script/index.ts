@@ -9,10 +9,11 @@ import { GroupOperatorInterface } from "../common/interface/model/group-operator
 import { GroupPrefixInterface } from "../common/interface/model/group-prefix";
 import { GroupRoleInterface } from "../common/interface/model/group-role";
 import { GroupRoleMemberInterface } from "../common/interface/model/group-role-member";
-import { GroupMessageInterface } from "../common/interface/model/group-message";
+import { GroupMessagePublicInterface } from "../common/interface/model/group-message-public";
+import { GroupMessagePrivateInterface } from "../common/interface/model/group-message-private";
 import { GroupExtensionInterface } from "../common/interface/model/group-extension";
 
-import { AdminModel, GroupExtensionModel, GroupMessageModel, GroupModel, GroupOperatorModel, GroupPrefixModel, GroupRoleMemberModel, GroupRoleModel } from "../model";
+import { AdminModel, GroupExtensionModel, GroupMessagePrivateModel, GroupMessagePublicModel, GroupModel, GroupOperatorModel, GroupPrefixModel, GroupRoleMemberModel, GroupRoleModel } from "../model";
 
 interface GroupRawInterface {
     _id: number;
@@ -51,7 +52,8 @@ const convertData = async (): Promise<void> => {
     let groupPrefixId: number = 1;
     let groupRoleId: number = 1;
     let groupRoleMemberId: number = 1;
-    let groupMessageId: number = 1;
+    let groupMessagePublicId: number = 1;
+    let groupMessagePrivateId: number = 1;
     let groupExtensionId: number = 1;
 
     const groupArray: Array<GroupInterface> = [];
@@ -59,7 +61,8 @@ const convertData = async (): Promise<void> => {
     const groupPrefixArray: Array<GroupPrefixInterface> = [];
     const groupRoleArray: Array<GroupRoleInterface> = [];
     const groupRoleMemberArray: Array<GroupRoleMemberInterface> = [];
-    const groupMessageArray: Array<GroupMessageInterface> = [];
+    const groupMessagePublicArray: Array<GroupMessagePublicInterface> = [];
+    const groupMessagePrivateArray: Array<GroupMessagePrivateInterface> = [];
     const groupExtensionArray: Array<GroupExtensionInterface> = [];
 
     groupRawArray.forEach((groupRawObject: GroupRawInterface) => {
@@ -78,9 +81,9 @@ const convertData = async (): Promise<void> => {
         });
 
         groupRawObject.message.forEach((groupRawMessageObject: string) => {
-            groupMessageArray.push({ _id: groupMessageId, id_group: groupId, text: groupRawMessageObject });
+            groupMessagePublicArray.push({ _id: groupMessagePublicId, id_group: groupId, text: groupRawMessageObject });
 
-            groupMessageId += 1;
+            groupMessagePublicId += 1;
         });
 
         groupId += 1;
@@ -91,7 +94,8 @@ const convertData = async (): Promise<void> => {
     fs.writeFileSync(`source/script/json/convert/group-prefix.json`, JSON.stringify(groupPrefixArray, null, 4), "utf8");
     fs.writeFileSync(`source/script/json/convert/group-role.json`, JSON.stringify(groupRoleArray, null, 4), "utf8");
     fs.writeFileSync(`source/script/json/convert/group-role-member.json`, JSON.stringify(groupRoleMemberArray, null, 4), "utf8");
-    fs.writeFileSync(`source/script/json/convert/group-message.json`, JSON.stringify(groupMessageArray, null, 4), "utf8");
+    fs.writeFileSync(`source/script/json/convert/group-message-public.json`, JSON.stringify(groupMessagePublicArray, null, 4), "utf8");
+    fs.writeFileSync(`source/script/json/convert/group-message-private.json`, JSON.stringify(groupMessagePrivateArray, null, 4), "utf8");
     fs.writeFileSync(`source/script/json/convert/group-extension.json`, JSON.stringify(groupExtensionArray, null, 4), "utf8");
 };
 
@@ -103,7 +107,8 @@ const importDataV3 = async (): Promise<void> => {
         ["source/script/json/convert/group-prefix.json", GroupPrefixModel],
         ["source/script/json/convert/group-role.json", GroupRoleModel],
         ["source/script/json/convert/group-role-member.json", GroupRoleMemberModel],
-        ["source/script/json/convert/group-message.json", GroupMessageModel],
+        ["source/script/json/convert/group-message-public.json", GroupMessagePublicModel],
+        ["source/script/json/convert/group-message-private.json", GroupMessagePrivateModel],
         ["source/script/json/convert/group-extension.json", GroupExtensionModel],
     ];
 

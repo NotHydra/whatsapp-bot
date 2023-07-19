@@ -9,14 +9,14 @@ import { generalHelp, generalEveryone, generalCredit, generalTest } from "./comm
 
 import { groupInitialize, groupTerminate } from "./command/group";
 import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
-import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
 import { groupOperatorShow, groupOperatorAdd, groupOperatorRemove } from "./command/group/operator";
+import { groupMessagePublicAdd, groupMessagePublicRemove, groupMessagePublicShow } from "./command/group/message/public";
 
 import { GroupInterface } from "./common/interface/model/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
-import { GroupMessageInterface } from "./common/interface/model/group-message";
+import { GroupMessagePublicInterface } from "./common/interface/model/group-message-public";
 
-import { GroupMessageModel, GroupModel } from "./model";
+import { GroupMessagePublicModel, GroupModel } from "./model";
 
 const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox", "--js-flags='--max_old_space_size=256'"] } });
 
@@ -64,7 +64,7 @@ client.on("message", async (message: Message): Promise<void> => {
                     developmentLog("Test 1 D Help");
 
                     await generalHelp(message);
-                } else if (isAdminValue || await isAdmin(message.author)) {
+                } else if (isAdminValue || (await isAdmin(message.author))) {
                     if (splittedMessage[1] == "test") {
                         developmentLog("Test 1 E Test");
 
@@ -92,20 +92,6 @@ client.on("message", async (message: Message): Promise<void> => {
 
                                 groupPrefixRemove(message, splittedMessage[4]);
                             }
-                        } else if (splittedMessage[2] == "message") {
-                            if (splittedMessage.length == 3) {
-                                developmentLog("Test 1 K Group Message");
-
-                                groupMessageShow(message);
-                            } else if (splittedMessage[3] == "add" && splittedMessage.length >= 5) {
-                                developmentLog("Test 1 L Group Message Add");
-
-                                groupMessageAdd(message, splittedMessage);
-                            } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
-                                developmentLog("Test 1 M Group Message Remove");
-
-                                groupMessageRemove(message, splittedMessage);
-                            }
                         } else if (splittedMessage[2] == "operator") {
                             if (splittedMessage.length == 3) {
                                 developmentLog("Test 1 N Group Operator");
@@ -119,6 +105,36 @@ client.on("message", async (message: Message): Promise<void> => {
                                 developmentLog("Test 1 P Group Operator Remove");
 
                                 groupOperatorRemove(message, splittedMessage[4]);
+                            }
+                        } else if (splittedMessage[2] == "message") {
+                            if (splittedMessage[3] == "public") {
+                                if (splittedMessage.length == 4) {
+                                    developmentLog("Test 1 K Group Message Public");
+
+                                    groupMessagePublicShow(message);
+                                } else if (splittedMessage[4] == "add" && splittedMessage.length >= 6) {
+                                    developmentLog("Test 1 L Group Message Public Add");
+
+                                    groupMessagePublicAdd(message, splittedMessage);
+                                } else if (splittedMessage[4] == "remove" && splittedMessage.length >= 6) {
+                                    developmentLog("Test 1 M Group Message Public Remove");
+
+                                    groupMessagePublicRemove(message, splittedMessage);
+                                }
+                            } else if (splittedMessage[3] == "private") {
+                                if (splittedMessage.length == 4) {
+                                    developmentLog("Test 1 K Group Message Private");
+
+                                    groupMessagePrivateShow(message);
+                                } else if (splittedMessage[4] == "add" && splittedMessage.length >= 6) {
+                                    developmentLog("Test 1 L Group Message Private Add");
+
+                                    groupMessagePrivateAdd(message, splittedMessage);
+                                } else if (splittedMessage[4] == "remove" && splittedMessage.length >= 6) {
+                                    developmentLog("Test 1 M Group Message Private Remove");
+
+                                    groupMessagePrivateRemove(message, splittedMessage);
+                                }
                             }
                         }
                     }
@@ -138,8 +154,11 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
             developmentLog("Test 2 2 Participant");
 
             const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: notification.chatId }).select({ _id: 1 }).lean();
-            const groupMessageArray: Array<HydratedDocument<GroupMessageInterface>> = await GroupMessageModel.find({ id_group: groupObject._id }).select({ text: 1 }).lean();
-            if (groupMessageArray.length >= 1) {
+            const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id })
+                .select({ text: 1 })
+                .lean();
+
+            if (groupMessagePublicArray.length >= 1) {
                 developmentLog("Test 2 3 Message");
 
                 const chat: Chat = await notification.getChat();
@@ -151,7 +170,7 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
                     })
                 );
 
-                await chat.sendMessage(`${textArray.join("\n")}\n\n${groupMessageArray[randomNumber(0, groupMessageArray.length)].text}`, {
+                await chat.sendMessage(`${textArray.join("\n")}\n\n${groupMessagePublicArray[randomNumber(0, groupMessagePublicArray.length)].text}`, {
                     mentions: mentionArray,
                 });
             }

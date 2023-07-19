@@ -1,8 +1,8 @@
 import { Schema } from "mongoose";
 
-import { GroupPrivateMessageInterface } from "../common/interface/model/group-private-message";
+import { GroupMessagePublicInterface } from "../common/interface/model/group-message-public";
 
-export const groupPrivateMessageSchema: Schema = new Schema<GroupPrivateMessageInterface>({
+export const groupMessagePublicSchema: Schema = new Schema<GroupMessagePublicInterface>({
     _id: {
         type: Number,
         required: true,
