@@ -16,8 +16,9 @@ import { groupMessagePrivateActive, groupMessagePrivateChange, groupMessagePriva
 import { GroupInterface } from "./common/interface/model/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
 import { GroupMessagePublicInterface } from "./common/interface/model/group-message-public";
+import { GroupMessagePrivateInterface } from "./common/interface/model/group-message-private";
 
-import { GroupMessagePublicModel, GroupModel } from "./model";
+import { GroupMessagePrivateModel, GroupMessagePublicModel, GroupModel } from "./model";
 
 const client: Client = new Client({ authStrategy: new LocalAuth(), puppeteer: { args: ["--no-sandbox", "--js-flags='--max_old_space_size=256'"] } });
 
@@ -131,8 +132,7 @@ client.on("message", async (message: Message): Promise<void> => {
                                     developmentLog("Test 1 O Group Message Private Active");
 
                                     groupMessagePrivateActive(message, splittedMessage[5]);
-                                }
-                                else if (splittedMessage[4] == "change" && splittedMessage.length >= 6) {
+                                } else if (splittedMessage[4] == "change" && splittedMessage.length >= 6) {
                                     developmentLog("Test 1 P Group Message Private Change");
 
                                     groupMessagePrivateChange(message, splittedMessage);
@@ -160,8 +160,12 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
                 .select({ text: 1 })
                 .lean();
 
+            const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id })                  
+                .select({ text: 1 })
+                .lean();
+
             if (groupMessagePublicArray.length >= 1) {
-                developmentLog("Test 2 3 Message");
+                developmentLog("Test 2 3 A Message Public");
 
                 const chat: Chat = await notification.getChat();
                 const textArray: Array<string> = [];
@@ -175,6 +179,14 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
                 await chat.sendMessage(`${textArray.join("\n")}\n\n${groupMessagePublicArray[randomNumber(0, groupMessagePublicArray.length)].text}`, {
                     mentions: mentionArray,
                 });
+            }
+
+            if (groupMessagePrivateObject != null && groupMessagePrivateObject.text != " ") {
+                developmentLog("Test 2 3 B Message Private");
+                
+                notification.recipientIds.forEach(async (recipientObject: string): Promise<void> => {
+                    await client.sendMessage(recipientObject, groupMessagePrivateObject.text);
+                })
             }
         }
 
