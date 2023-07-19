@@ -6,7 +6,7 @@ import { GroupInterface } from "./common/interface/model/group";
 import { GroupPrefixInterface } from "./common/interface/model/group-prefix";
 import { ModelIdInterface } from "./common/interface/model";
 
-import { AdminModel, GroupModel, GroupPrefixModel } from "./model";
+import { AdminModel, GroupModel, GroupOperatorModel, GroupPrefixModel } from "./model";
 
 export const developmentLog = (text: string): void => {
     if (dbName == "development") {
@@ -39,6 +39,22 @@ export const isAdmin = async (contact: string): Promise<boolean> => {
 
     if (isExist != null) {
         return true;
+    } else {
+        return false;
+    }
+};
+
+export const isOperator = async (remote: string, contact: string): Promise<boolean> => {
+    const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: remote }).select({ _id: 1 }).lean();
+
+    if (groupObject != null) {
+        const isExist: ModelIdInterface = await GroupOperatorModel.exists({ id_group: groupObject, contact: contact }).lean();
+
+        if (isExist != null) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }

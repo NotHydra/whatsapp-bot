@@ -3,7 +3,7 @@ import qrcode from "qrcode-terminal";
 import mongoose, { HydratedDocument } from "mongoose";
 
 import { botContact, dbURI } from "./depedency";
-import { isAdmin, groupIsValid, prefixIsValid, randomNumber, developmentLog } from "./utility";
+import { isAdmin, groupIsValid, prefixIsValid, randomNumber, developmentLog, isOperator } from "./utility";
 
 import { generalHelp, generalEveryone, generalCredit, generalTest } from "./command/general";
 
@@ -66,8 +66,8 @@ client.on("message", async (message: Message): Promise<void> => {
                     developmentLog("Message (Help)");
 
                     await generalHelp(message);
-                } else if (isAdminValue || (await isAdmin(message.author))) {
-                    developmentLog("Message (Admin Validation)");
+                } else if (isAdminValue || (await isAdmin(message.author)) || (await isOperator(message.from, message.author))) {
+                    developmentLog("Message (Admin or Operator Validation)");
 
                     if (splittedMessage[1] == "test") {
                         developmentLog("Message (Test)");
@@ -82,20 +82,6 @@ client.on("message", async (message: Message): Promise<void> => {
                             developmentLog("Message (Group Terminate)");
 
                             groupTerminate(message);
-                        } else if (splittedMessage[2] == "prefix") {
-                            if (splittedMessage.length == 3) {
-                                developmentLog("Message (Group Prefix)");
-
-                                groupPrefixShow(message);
-                            } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
-                                developmentLog("Message (Group Prefix Add)");
-
-                                groupPrefixAdd(message, splittedMessage[4]);
-                            } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
-                                developmentLog("Message (Group Prefix Remove)");
-
-                                groupPrefixRemove(message, splittedMessage[4]);
-                            }
                         } else if (splittedMessage[2] == "operator") {
                             if (splittedMessage.length == 3) {
                                 developmentLog("Message (Group Operator)");
@@ -109,6 +95,20 @@ client.on("message", async (message: Message): Promise<void> => {
                                 developmentLog("Message (Group Operator Remove)");
 
                                 groupOperatorRemove(message, splittedMessage[4]);
+                            }
+                        } else if (splittedMessage[2] == "prefix") {
+                            if (splittedMessage.length == 3) {
+                                developmentLog("Message (Group Prefix)");
+
+                                groupPrefixShow(message);
+                            } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
+                                developmentLog("Message (Group Prefix Add)");
+
+                                groupPrefixAdd(message, splittedMessage[4]);
+                            } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
+                                developmentLog("Message (Group Prefix Remove)");
+
+                                groupPrefixRemove(message, splittedMessage[4]);
                             }
                         } else if (splittedMessage[2] == "message") {
                             if (splittedMessage[3] == "public") {
