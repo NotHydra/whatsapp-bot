@@ -10,20 +10,24 @@ import { GroupMessagePublicModel, GroupModel } from "../../../../model";
 
 export const groupMessagePublicShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
-    const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id })
-        .select({ text: 1 })
-        .lean();
+    if (groupObject != null) {
+        const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id })
+            .select({ text: 1 })
+            .lean();
 
-    if (groupMessagePublicArray.length >= 1) {
-        const textArray: Array<string> = groupMessagePublicArray.map(
-            (groupMessagePublicObject: HydratedDocument<GroupMessagePublicInterface>, groupMessagePublicIndex: number): string => {
-                return `${groupMessagePublicIndex + 1}. ${groupMessagePublicObject.text}`;
-            }
-        );
+        if (groupMessagePublicArray.length >= 1) {
+            const textArray: Array<string> = groupMessagePublicArray.map(
+                (groupMessagePublicObject: HydratedDocument<GroupMessagePublicInterface>, groupMessagePublicIndex: number): string => {
+                    return `${groupMessagePublicIndex + 1}. ${groupMessagePublicObject.text}`;
+                }
+            );
 
-        await message.reply(textArray.join("\n\n"));
+            await message.reply(textArray.join("\n\n"));
+        } else {
+            await message.reply("No Public Message Available");
+        }
     } else {
-        await message.reply("No Public Message Available");
+        await message.reply("Bot Doesn't Exist");
     }
 };
 

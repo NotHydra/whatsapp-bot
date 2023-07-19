@@ -11,14 +11,18 @@ import { GroupMessagePrivateModel, GroupModel } from "../../../../model";
 
 export const groupMessagePrivateShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
-    const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id })
-        .select({ text: 1 })
-        .lean();
+    if (groupObject != null) {
+        const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id })
+            .select({ text: 1 })
+            .lean();
 
-    if (groupMessagePrivateObject != null && groupMessagePrivateObject.text != " ") {
-        await message.reply(groupMessagePrivateObject.text);
+        if (groupMessagePrivateObject != null && groupMessagePrivateObject.text != " ") {
+            await message.reply(groupMessagePrivateObject.text);
+        } else {
+            await message.reply("No Private Message Available");
+        }
     } else {
-        await message.reply("No Private Message Available");
+        await message.reply("Bot Doesn't Exist");
     }
 };
 

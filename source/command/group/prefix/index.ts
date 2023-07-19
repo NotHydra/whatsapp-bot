@@ -10,15 +10,19 @@ import { GroupModel, GroupPrefixModel } from "../../../model";
 
 export const groupPrefixShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
-    const groupPrefixArray: Array<HydratedDocument<GroupPrefixInterface>> = await GroupPrefixModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();
-    if (groupPrefixArray.length >= 1) {
-        const textArray: Array<string> = groupPrefixArray.map((groupPrefixObject: HydratedDocument<GroupPrefixInterface>, groupPrefixIndex: number): string => {
-            return `${groupPrefixIndex + 1}. ${groupPrefixObject.name}`;
-        });
+    if (groupObject != null) {
+        const groupPrefixArray: Array<HydratedDocument<GroupPrefixInterface>> = await GroupPrefixModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();
+        if (groupPrefixArray.length >= 1) {
+            const textArray: Array<string> = groupPrefixArray.map((groupPrefixObject: HydratedDocument<GroupPrefixInterface>, groupPrefixIndex: number): string => {
+                return `${groupPrefixIndex + 1}. ${groupPrefixObject.name}`;
+            });
 
-        await message.reply(textArray.join("\n"));
+            await message.reply(textArray.join("\n"));
+        } else {
+            await message.reply("No Prefix Available");
+        }
     } else {
-        await message.reply("No Prefix Available");
+        await message.reply("Bot Doesn't Exist");
     }
 };
 

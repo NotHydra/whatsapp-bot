@@ -10,15 +10,19 @@ import { GroupModel, GroupOperatorModel } from "../../../model";
 
 export const groupOperatorShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
-    const groupOperatorArray: Array<HydratedDocument<GroupOperatorInterface>> = await GroupOperatorModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();
-    if (groupOperatorArray.length >= 1) {
-        const textArray: Array<string> = groupOperatorArray.map((groupOperatorObject: HydratedDocument<GroupOperatorInterface>, groupOperatorIndex: number): string => {
-            return `${groupOperatorIndex + 1}. ${groupOperatorObject.name}`;
-        });
+    if (groupObject != null) {
+        const groupOperatorArray: Array<HydratedDocument<GroupOperatorInterface>> = await GroupOperatorModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();
+        if (groupOperatorArray.length >= 1) {
+            const textArray: Array<string> = groupOperatorArray.map((groupOperatorObject: HydratedDocument<GroupOperatorInterface>, groupOperatorIndex: number): string => {
+                return `${groupOperatorIndex + 1}. ${groupOperatorObject.name}`;
+            });
 
-        await message.reply(textArray.join("\n"));
+            await message.reply(textArray.join("\n"));
+        } else {
+            await message.reply("No Operator Available");
+        }
     } else {
-        await message.reply("No Operator Available");
+        await message.reply("Bot Doesn't Exist");
     }
 };
 
