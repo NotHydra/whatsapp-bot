@@ -1,6 +1,8 @@
 import { Message } from "whatsapp-web.js";
 import { HydratedDocument } from "mongoose";
 
+import { latestModelId } from "../../../../utility";
+
 import { ModelIdInterface } from "../../../../common/interface/model";
 import { GroupInterface } from "../../../../common/interface/model/group";
 import { GroupMessagePrivateInterface } from "../../../../common/interface/model/group-message-private";
@@ -25,7 +27,7 @@ export const groupMessagePrivateActive = async (message: Message, value: string)
         if (value == "true") {
             if (isExist == null) {
                 await GroupMessagePrivateModel.create({
-                    _id: 1,
+                    _id: await latestModelId(GroupMessagePrivateModel),
                     id_group: groupObject._id,
                     text: " ",
                 });
