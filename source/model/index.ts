@@ -6,21 +6,23 @@ import { AdminInterface } from "../common/interface/model/admin";
 
 import { GroupInterface } from "../common/interface/model/group";
 import { GroupOperatorInterface } from "../common/interface/model/group-operator";
-import { GroupExtensionInterface } from "../common/interface/model/group-extension";
-import { GroupMessageInterface } from "../common/interface/model/group-message";
 import { GroupPrefixInterface } from "../common/interface/model/group-prefix";
 import { GroupRoleInterface } from "../common/interface/model/group-role";
 import { GroupRoleMemberInterface } from "../common/interface/model/group-role-member";
+import { GroupMessageInterface } from "../common/interface/model/group-message";
+import { GroupPrivateMessageInterface } from "../common/interface/model/group-private-message";
+import { GroupExtensionInterface } from "../common/interface/model/group-extension";
 
 import { adminSchema } from "./admin";
 
 import { groupSchema } from "./group";
 import { groupOperatorSchema } from "./group-operator";
-import { groupExtensionSchema } from "./group-extension";
-import { groupMessageSchema } from "./group-message";
 import { groupPrefixSchema } from "./group-prefix";
 import { groupRoleSchema } from "./group-role";
 import { groupRoleMemberSchema } from "./group-role-member";
+import { groupMessageSchema } from "./group-message";
+import { groupPrivateMessageSchema } from "./group-private-message";
+import { groupExtensionSchema } from "./group-extension";
 
 const database: Connection = connection.useDb(dbName);
 
@@ -32,4 +34,5 @@ export const GroupPrefixModel: Model<GroupPrefixInterface> = database.model<Grou
 export const GroupRoleModel: Model<GroupRoleInterface> = database.model<GroupRoleInterface>("group-role", groupRoleSchema, "group-role");
 export const GroupRoleMemberModel: Model<GroupRoleMemberInterface> = database.model<GroupRoleMemberInterface>("group-role-member", groupRoleMemberSchema, "group-role-member");
 export const GroupMessageModel: Model<GroupMessageInterface> = database.model<GroupMessageInterface>("group-message", groupMessageSchema, "group-message");
+export const GroupPrivateMessageModel: Model<GroupPrivateMessageInterface> = database.model<GroupPrivateMessageInterface>("group-private-message", groupPrivateMessageSchema, "group-private-message");                     
 export const GroupExtensionModel: Model<GroupExtensionInterface> = database.model<GroupExtensionInterface>("group-extension", groupExtensionSchema, "group-extension");
