@@ -10,6 +10,7 @@ import { generalHelp, generalEveryone, generalCredit, generalTest } from "./comm
 import { groupInitialize, groupTerminate } from "./command/group";
 import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
 import { groupMessageAdd, groupMessageRemove, groupMessageShow } from "./command/group/message";
+import { groupOperatorShow, groupOperatorAdd, groupOperatorRemove } from "./command/group/operator";
 
 import { GroupInterface } from "./common/interface/model/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
@@ -95,9 +96,23 @@ client.on("message", async (message: Message): Promise<void> => {
 
                                 groupMessageAdd(message, splittedMessage);
                             } else if (splittedMessage[3] == "remove" && splittedMessage.length >= 5) {
-                                developmentLog("Test 1 K Group Message Remove");
+                                developmentLog("Test 1 M Group Message Remove");
 
                                 groupMessageRemove(message, splittedMessage);
+                            }
+                        } else if (splittedMessage[2] == "operator") {
+                            if (splittedMessage.length == 3) {
+                                developmentLog("Test 1 N Group Operator");
+
+                                groupOperatorShow(message);
+                            } else if (splittedMessage[3] == "add" && splittedMessage.length == 6) {
+                                developmentLog("Test 1 O Group Operator Add");
+
+                                groupOperatorAdd(message, splittedMessage[4], splittedMessage[5]);
+                            } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
+                                developmentLog("Test 1 P Group Operator Remove");
+
+                                groupOperatorRemove(message, splittedMessage[4]);
                             }
                         }
                     }
