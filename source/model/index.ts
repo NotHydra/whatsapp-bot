@@ -33,6 +33,14 @@ export const GroupOperatorModel: Model<GroupOperatorInterface> = database.model<
 export const GroupPrefixModel: Model<GroupPrefixInterface> = database.model<GroupPrefixInterface>("group-prefix", groupPrefixSchema, "group-prefix");
 export const GroupRoleModel: Model<GroupRoleInterface> = database.model<GroupRoleInterface>("group-role", groupRoleSchema, "group-role");
 export const GroupRoleMemberModel: Model<GroupRoleMemberInterface> = database.model<GroupRoleMemberInterface>("group-role-member", groupRoleMemberSchema, "group-role-member");
-export const GroupMessagePublicModel: Model<GroupMessagePublicInterface> = database.model<GroupMessagePublicInterface>("group-message-public", groupMessagePublicSchema, "group-message-public");
-export const GroupMessagePrivateModel: Model<GroupMessagePrivateInterface> = database.model<GroupMessagePrivateInterface>("group-message-private", groupMessagePrivateSchema, "group-message-private");                     
+export const GroupMessagePublicModel: Model<GroupMessagePublicInterface> = database.model<GroupMessagePublicInterface>(
+    "group-message-public",
+    groupMessagePublicSchema,
+    "group-message-public"
+);
+export const GroupMessagePrivateModel: Model<GroupMessagePrivateInterface> = database.model<GroupMessagePrivateInterface>(
+    "group-message-private",
+    groupMessagePrivateSchema,
+    "group-message-private"
+);
 export const GroupExtensionModel: Model<GroupExtensionInterface> = database.model<GroupExtensionInterface>("group-extension", groupExtensionSchema, "group-extension");

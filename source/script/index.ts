@@ -13,7 +13,17 @@ import { GroupMessagePublicInterface } from "../common/interface/model/group-mes
 import { GroupMessagePrivateInterface } from "../common/interface/model/group-message-private";
 import { GroupExtensionInterface } from "../common/interface/model/group-extension";
 
-import { AdminModel, GroupExtensionModel, GroupMessagePrivateModel, GroupMessagePublicModel, GroupModel, GroupOperatorModel, GroupPrefixModel, GroupRoleMemberModel, GroupRoleModel } from "../model";
+import {
+    AdminModel,
+    GroupExtensionModel,
+    GroupMessagePrivateModel,
+    GroupMessagePublicModel,
+    GroupModel,
+    GroupOperatorModel,
+    GroupPrefixModel,
+    GroupRoleMemberModel,
+    GroupRoleModel,
+} from "../model";
 
 interface GroupRawInterface {
     _id: number;

@@ -6,7 +6,16 @@ import { latestModelId } from "../../utility";
 import { ModelIdInterface } from "../../common/interface/model";
 import { GroupRoleInterface } from "../../common/interface/model/group-role";
 
-import { GroupExtensionModel, GroupMessagePrivateModel, GroupMessagePublicModel, GroupModel, GroupOperatorModel, GroupPrefixModel, GroupRoleMemberModel, GroupRoleModel } from "../../model";
+import {
+    GroupExtensionModel,
+    GroupMessagePrivateModel,
+    GroupMessagePublicModel,
+    GroupModel,
+    GroupOperatorModel,
+    GroupPrefixModel,
+    GroupRoleMemberModel,
+    GroupRoleModel,
+} from "../../model";
 
 export const groupInitialize = async (message: Message, name: string): Promise<void> => {
     const groupExist: ModelIdInterface = await GroupModel.exists({ remote: message.from }).lean();

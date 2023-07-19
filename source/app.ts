@@ -162,7 +162,7 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
                 .select({ text: 1 })
                 .lean();
 
-            const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id })                  
+            const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id })
                 .select({ text: 1 })
                 .lean();
 
@@ -185,10 +185,10 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
 
             if (groupMessagePrivateObject != null && groupMessagePrivateObject.text != " ") {
                 developmentLog("Group Join (Message Private)");
-                
+
                 notification.recipientIds.forEach(async (recipientObject: string): Promise<void> => {
                     await client.sendMessage(recipientObject, groupMessagePrivateObject.text);
-                })
+                });
             }
         }
 

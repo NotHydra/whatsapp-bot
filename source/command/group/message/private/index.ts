@@ -11,7 +11,10 @@ import { GroupMessagePrivateModel, GroupModel } from "../../../../model";
 
 export const groupMessagePrivateShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
-    const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id }).select({ text: 1 }).lean();                         
+    const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id })
+        .select({ text: 1 })
+        .lean();
+
     if (groupMessagePrivateObject != null && groupMessagePrivateObject.text != " ") {
         await message.reply(groupMessagePrivateObject.text);
     } else {
@@ -23,7 +26,7 @@ export const groupMessagePrivateActive = async (message: Message, value: string)
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
     if (groupObject != null) {
         const isExist: ModelIdInterface = await GroupMessagePrivateModel.exists({ id_group: groupObject._id }).lean();
-        
+
         if (value == "true") {
             if (isExist == null) {
                 await GroupMessagePrivateModel.create({
@@ -31,7 +34,7 @@ export const groupMessagePrivateActive = async (message: Message, value: string)
                     id_group: groupObject._id,
                     text: " ",
                 });
-    
+
                 await message.reply("Public Message Activated");
             } else {
                 await message.reply("Private Message Already Activated");
@@ -41,7 +44,7 @@ export const groupMessagePrivateActive = async (message: Message, value: string)
                 await GroupMessagePrivateModel.deleteOne({
                     id_group: groupObject._id,
                 });
-    
+
                 await message.reply("Public Message Deactivated");
             } else {
                 await message.reply("Private Message Already Deactivated");
@@ -60,7 +63,7 @@ export const groupMessagePrivateChange = async (message: Message, splittedMessag
         const isExist: ModelIdInterface = await GroupMessagePrivateModel.exists({ id_group: groupObject._id }).lean();
 
         if (isExist != null) {
-            await GroupMessagePrivateModel.updateOne({ id_group: groupObject._id}, {text: argumentMessage});
+            await GroupMessagePrivateModel.updateOne({ id_group: groupObject._id }, { text: argumentMessage });
 
             await message.reply("Private Message Changed");
         } else {

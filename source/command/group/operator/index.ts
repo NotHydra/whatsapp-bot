@@ -59,7 +59,7 @@ export const groupOperatorRemove = async (message: Message, name: string): Promi
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
     if (groupObject != null) {
         if (/^[a-z]+$/.test(name)) {
-            const groupOperatorArray: Array<HydratedDocument<GroupOperatorInterface>> = await GroupOperatorModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();                            
+            const groupOperatorArray: Array<HydratedDocument<GroupOperatorInterface>> = await GroupOperatorModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();
             if (includeKey(groupOperatorArray, "name", name)) {
                 await GroupOperatorModel.deleteOne({
                     id_group: groupObject._id,

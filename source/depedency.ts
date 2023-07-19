@@ -49,5 +49,5 @@ export const socialArray: Array<SocialInterface> = [
     { title: "Website", link: "irswanda.com" },
     { title: "Instagram", link: "instagram.com/rz_irswanda" },
     { title: "LinkedIn", link: "www.linkedin.com/in/rizky-irswanda-b068b6216" },
-    { title: "Email", link: "rizky.irswanda115@gmail.com" }, 
+    { title: "Email", link: "rizky.irswanda115@gmail.com" },
 ];

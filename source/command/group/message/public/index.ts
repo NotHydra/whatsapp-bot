@@ -10,11 +10,16 @@ import { GroupMessagePublicModel, GroupModel } from "../../../../model";
 
 export const groupMessagePublicShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
-    const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id }).select({ text: 1 }).lean();                         
+    const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id })
+        .select({ text: 1 })
+        .lean();
+
     if (groupMessagePublicArray.length >= 1) {
-        const textArray: Array<string> = groupMessagePublicArray.map((groupMessagePublicObject: HydratedDocument<GroupMessagePublicInterface>, groupMessagePublicIndex: number): string => {
-            return `${groupMessagePublicIndex + 1}. ${groupMessagePublicObject.text}`;
-        });
+        const textArray: Array<string> = groupMessagePublicArray.map(
+            (groupMessagePublicObject: HydratedDocument<GroupMessagePublicInterface>, groupMessagePublicIndex: number): string => {
+                return `${groupMessagePublicIndex + 1}. ${groupMessagePublicObject.text}`;
+            }
+        );
 
         await message.reply(textArray.join("\n\n"));
     } else {
@@ -27,7 +32,10 @@ export const groupMessagePublicAdd = async (message: Message, splittedMessage: A
     if (groupObject != null) {
         splittedMessage.splice(0, 5);
         const argumentMessage: string = splittedMessage.join(" ");
-        const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id }).select({ text: 1 }).lean();                     
+        const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id })
+            .select({ text: 1 })
+            .lean();
+
         if (!includeKey(groupMessagePublicArray, "text", argumentMessage)) {
             await GroupMessagePublicModel.create({
                 _id: await latestModelId(GroupMessagePublicModel),
@@ -49,7 +57,10 @@ export const groupMessagePublicRemove = async (message: Message, splittedMessage
     if (groupObject != null) {
         splittedMessage.splice(0, 5);
         const argumentMessage: string = splittedMessage.join(" ");
-        const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id }).select({ text: 1 }).lean();
+        const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id })
+            .select({ text: 1 })
+            .lean();
+
         if (includeKey(groupMessagePublicArray, "text", argumentMessage)) {
             await GroupMessagePublicModel.deleteOne({ id_group: groupObject._id, text: argumentMessage });
 
