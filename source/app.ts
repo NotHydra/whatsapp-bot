@@ -34,7 +34,7 @@ client.on("ready", async (): Promise<void> => {
 
 client.on("message", async (message: Message): Promise<void> => {
     if (message.body[0] == "!") {
-        developmentLog("Test 1 1 Exclamation");
+        developmentLog("Message (Exclamation Validation)");
 
         const groupIsValidValue = await groupIsValid(message.from);
         let isAdminValue: boolean = false;
@@ -44,96 +44,98 @@ client.on("message", async (message: Message): Promise<void> => {
         }
 
         if (groupIsValidValue || isAdminValue) {
-            developmentLog("Test 1 2 Validation");
+            developmentLog("Message (Group or Admin Validation)");
 
             const splittedMessage: Array<string> = message.body.split(" ");
             if (await prefixIsValid(message.from, splittedMessage[0])) {
-                developmentLog("Test 1 3 Prefix");
+                developmentLog("Message (Prefix Validation)");
 
                 if (splittedMessage.length == 1) {
-                    developmentLog("Test 1 A Default");
+                    developmentLog("Message (Default)");
 
                     await generalHelp(message);
                 } else if (splittedMessage[1] == "everyone") {
-                    developmentLog("Test 1 B Everyone");
+                    developmentLog("Message (Everyone)");
 
                     await generalEveryone(message, client);
                 } else if (splittedMessage[1] == "credit") {
-                    developmentLog("Test 1 C Credit");
+                    developmentLog("Message (Credit)");
 
                     await generalCredit(message);
                 } else if (splittedMessage[1] == "help") {
-                    developmentLog("Test 1 D Help");
+                    developmentLog("Message (Help)");
 
                     await generalHelp(message);
                 } else if (isAdminValue || (await isAdmin(message.author))) {
+                    developmentLog("Message (Admin Validation)");
+
                     if (splittedMessage[1] == "test") {
-                        developmentLog("Test 1 E Test");
+                        developmentLog("Message (Test)");
 
                         await generalTest(message, client);
                     } else if (splittedMessage[1] == "group") {
                         if (splittedMessage[2] == "initialize" && splittedMessage.length == 4) {
-                            developmentLog("Test 1 F Group Initialize");
+                            developmentLog("Message (Group Initialize)");
 
                             groupInitialize(message, splittedMessage[3]);
                         } else if (splittedMessage[2] == "terminate") {
-                            developmentLog("Test 1 G Group Terminate");
+                            developmentLog("Message (Group Terminate)");
 
                             groupTerminate(message);
                         } else if (splittedMessage[2] == "prefix") {
                             if (splittedMessage.length == 3) {
-                                developmentLog("Test 1 H Group Prefix");
+                                developmentLog("Message (Group Prefix)");
 
                                 groupPrefixShow(message);
                             } else if (splittedMessage[3] == "add" && splittedMessage.length == 5) {
-                                developmentLog("Test 1 I Group Prefix Add");
+                                developmentLog("Message (Group Prefix Add)");
 
                                 groupPrefixAdd(message, splittedMessage[4]);
                             } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
-                                developmentLog("Test 1 J Group Prefix Remove");
+                                developmentLog("Message (Group Prefix Remove)");
 
                                 groupPrefixRemove(message, splittedMessage[4]);
                             }
                         } else if (splittedMessage[2] == "operator") {
                             if (splittedMessage.length == 3) {
-                                developmentLog("Test 1 N Group Operator");
+                                developmentLog("Message (Group Operator)");
 
                                 groupOperatorShow(message);
                             } else if (splittedMessage[3] == "add" && splittedMessage.length == 6) {
-                                developmentLog("Test 1 O Group Operator Add");
+                                developmentLog("Message (Group Operator Add)");
 
                                 groupOperatorAdd(message, splittedMessage[4], splittedMessage[5]);
                             } else if (splittedMessage[3] == "remove" && splittedMessage.length == 5) {
-                                developmentLog("Test 1 P Group Operator Remove");
+                                developmentLog("Message (Group Operator Remove)");
 
                                 groupOperatorRemove(message, splittedMessage[4]);
                             }
                         } else if (splittedMessage[2] == "message") {
                             if (splittedMessage[3] == "public") {
                                 if (splittedMessage.length == 4) {
-                                    developmentLog("Test 1 K Group Message Public");
+                                    developmentLog("Message (Group Message Public)");
 
                                     groupMessagePublicShow(message);
                                 } else if (splittedMessage[4] == "add" && splittedMessage.length >= 6) {
-                                    developmentLog("Test 1 L Group Message Public Add");
+                                    developmentLog("Message (Group Message Public Add)");
 
                                     groupMessagePublicAdd(message, splittedMessage);
                                 } else if (splittedMessage[4] == "remove" && splittedMessage.length >= 6) {
-                                    developmentLog("Test 1 M Group Message Public Remove");
+                                    developmentLog("Message (Group Message Public Remove)");
 
                                     groupMessagePublicRemove(message, splittedMessage);
                                 }
                             } else if (splittedMessage[3] == "private") {
                                 if (splittedMessage.length == 4) {
-                                    developmentLog("Test 1 N Group Message Private");
+                                    developmentLog("Message (Group Message Private)");
 
                                     groupMessagePrivateShow(message);
                                 } else if (splittedMessage[4] == "active" && ["true", "false"].includes(splittedMessage[5])) {
-                                    developmentLog("Test 1 O Group Message Private Active");
+                                    developmentLog("Message (Group Message Private Active)");
 
                                     groupMessagePrivateActive(message, splittedMessage[5]);
                                 } else if (splittedMessage[4] == "change" && splittedMessage.length >= 6) {
-                                    developmentLog("Test 1 P Group Message Private Change");
+                                    developmentLog("Message (Group Message Private Change)");
 
                                     groupMessagePrivateChange(message, splittedMessage);
                                 }
@@ -150,10 +152,10 @@ client.on("message", async (message: Message): Promise<void> => {
 
 client.on("group_join", async (notification: GroupNotificationExtended): Promise<void> => {
     if (await groupIsValid(notification.chatId)) {
-        developmentLog("Test 2 1 Validation");
+        developmentLog("Group Join (Group Validation)");
 
         if (notification.id.participant != botContact) {
-            developmentLog("Test 2 2 Participant");
+            developmentLog("Group Join (Not Self Validation)");
 
             const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: notification.chatId }).select({ _id: 1 }).lean();
             const groupMessagePublicArray: Array<HydratedDocument<GroupMessagePublicInterface>> = await GroupMessagePublicModel.find({ id_group: groupObject._id })
@@ -165,7 +167,7 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
                 .lean();
 
             if (groupMessagePublicArray.length >= 1) {
-                developmentLog("Test 2 3 A Message Public");
+                developmentLog("Group Join (Message Public)");
 
                 const chat: Chat = await notification.getChat();
                 const textArray: Array<string> = [];
@@ -182,7 +184,7 @@ client.on("group_join", async (notification: GroupNotificationExtended): Promise
             }
 
             if (groupMessagePrivateObject != null && groupMessagePrivateObject.text != " ") {
-                developmentLog("Test 2 3 B Message Private");
+                developmentLog("Group Join (Message Private)");
                 
                 notification.recipientIds.forEach(async (recipientObject: string): Promise<void> => {
                     await client.sendMessage(recipientObject, groupMessagePrivateObject.text);
