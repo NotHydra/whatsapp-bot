@@ -34,8 +34,14 @@ client.on("message", async (message: Message): Promise<void> => {
     if (message.body[0] == "!") {
         developmentLog("Test 1 1 Exclamation");
 
-        const isAdminValue: boolean = await isAdmin(message.author);
-        if (isAdminValue || (await groupIsValid(message.from))) {
+        const groupIsValidValue = await groupIsValid(message.from);
+        let isAdminValue: boolean = false;
+
+        if (!groupIsValidValue) {
+            isAdminValue = await isAdmin(message.author);
+        }
+
+        if (groupIsValidValue || isAdminValue) {
             developmentLog("Test 1 2 Validation");
 
             const splittedMessage: Array<string> = message.body.split(" ");
@@ -58,7 +64,7 @@ client.on("message", async (message: Message): Promise<void> => {
                     developmentLog("Test 1 D Help");
 
                     await generalHelp(message);
-                } else if (isAdminValue) {
+                } else if (isAdminValue || await isAdmin(message.author)) {
                     if (splittedMessage[1] == "test") {
                         developmentLog("Test 1 E Test");
 
