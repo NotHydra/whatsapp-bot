@@ -8,14 +8,14 @@ import { ModelIdInterface } from "./common/interface/model";
 
 import { AdminModel, GroupModel, GroupPrefixModel } from "./model";
 
-export const randomNumber = (min: number, max: number): number => {
-    return Math.floor(Math.random() * (max - min) + min);
-};
-
 export const developmentLog = (text: string): void => {
     if (dbName == "development") {
         console.log(text);
     }
+};
+
+export const randomNumber = (min: number, max: number): number => {
+    return Math.floor(Math.random() * (max - min) + min);
 };
 
 export const includeKey = <T>(array: Array<T>, key: string, value: string): boolean => {
@@ -44,6 +44,16 @@ export const isAdmin = async (contact: string): Promise<boolean> => {
     }
 };
 
+export const groupIsValid = async (remote: string): Promise<boolean> => {
+    const isExist: ModelIdInterface = await GroupModel.exists({ remote: remote }).lean();
+
+    if (isExist != null) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 export const prefixIsValid = async (remote: string, value: string): Promise<boolean> => {
     if (includeKey(prefixArray, "name", value)) {
         return true;
@@ -53,15 +63,5 @@ export const prefixIsValid = async (remote: string, value: string): Promise<bool
             const groupPrefixArray: Array<HydratedDocument<GroupPrefixInterface>> = await GroupPrefixModel.find({ id_group: groupObject._id }).select({ name: 1 }).lean();
             return includeKey(groupPrefixArray, "name", value);
         }
-    }
-};
-
-export const groupIsValid = async (remote: string): Promise<boolean> => {
-    const isExist: ModelIdInterface = await GroupModel.exists({ remote: remote }).lean();
-
-    if (isExist != null) {
-        return true;
-    } else {
-        return false;
     }
 };

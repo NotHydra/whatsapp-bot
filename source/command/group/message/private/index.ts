@@ -1,8 +1,6 @@
 import { Message } from "whatsapp-web.js";
 import { HydratedDocument } from "mongoose";
 
-import { includeKey, latestModelId } from "../../../../utility";
-
 import { ModelIdInterface } from "../../../../common/interface/model";
 import { GroupInterface } from "../../../../common/interface/model/group";
 import { GroupMessagePrivateInterface } from "../../../../common/interface/model/group-message-private";
@@ -11,13 +9,9 @@ import { GroupMessagePrivateModel, GroupModel } from "../../../../model";
 
 export const groupMessagePrivateShow = async (message: Message): Promise<void> => {
     const groupObject: HydratedDocument<GroupInterface> = await GroupModel.findOne({ remote: message.from }).select({ _id: 1 }).lean();
-    const groupMessagePrivateArray: Array<HydratedDocument<GroupMessagePrivateInterface>> = await GroupMessagePrivateModel.find({ id_group: groupObject._id }).select({ text: 1 }).lean();                         
-    if (groupMessagePrivateArray.length >= 1) {
-        const textArray: Array<string> = groupMessagePrivateArray.map((groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface>, groupMessagePrivateIndex: number): string => {
-            return `${groupMessagePrivateIndex + 1}. ${groupMessagePrivateObject.text}`;
-        });
-
-        await message.reply(textArray.join("\n\n"));
+    const groupMessagePrivateObject: HydratedDocument<GroupMessagePrivateInterface> = await GroupMessagePrivateModel.findOne({ id_group: groupObject._id }).select({ text: 1 }).lean();                         
+    if (groupMessagePrivateObject != null && groupMessagePrivateObject.text != " ") {
+        await message.reply(groupMessagePrivateObject.text);
     } else {
         await message.reply("No Private Message Available");
     }
