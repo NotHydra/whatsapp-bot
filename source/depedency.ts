@@ -1,5 +1,6 @@
 import { PrefixInterface } from "./common/interface/prefix";
 import { CommandInterface } from "./common/interface/command";
+import { SocialInterface } from "./common/interface/social";
 
 require("dotenv").config();
 
@@ -42,4 +43,11 @@ export const commandArray: Array<CommandInterface> = [
         command: "help",
         description: "list all command",
     },
+];
+
+export const socialArray: Array<SocialInterface> = [
+    { title: "Website", link: "irswanda.com" },
+    { title: "Instagram", link: "instagram.com/rz_irswanda" },
+    { title: "LinkedIn", link: "www.linkedin.com/in/rizky-irswanda-b068b6216" },
+    { title: "Email", link: "rizky.irswanda115@gmail.com" }, 
 ];

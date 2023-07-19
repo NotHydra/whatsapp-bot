@@ -1,9 +1,10 @@
 import { Client, Contact, GroupParticipant, Message } from "whatsapp-web.js";
 
-import { commandArray } from "../../depedency";
+import { commandArray, socialArray } from "../../depedency";
 
 import { CommandInterface } from "../../common/interface/command";
 import { ChatExtended } from "../../common/interface/chat";
+import { SocialInterface } from "../../common/interface/social";
 
 export const generalEveryone = async (message: Message, client: Client): Promise<void> => {
     const chat: ChatExtended = await message.getChat();
@@ -29,18 +30,22 @@ export const generalEveryone = async (message: Message, client: Client): Promise
 
 export const generalCredit = async (message: Message): Promise<void> => {
     await message.reply(
-        "Website: irswanda.com\n\nInstagram: instagram.com/rz_irswanda\n\nLinkedIn: www.linkedin.com/in/rizky-irswanda-b068b6216\n\nEmail: rizky.irswanda115@gmail.com"
+        socialArray
+            .map((socialObject: SocialInterface) => {
+                return `${socialObject.title}: ${socialObject.link}`;
+            })
+            .join("\n\n")
     );
 };
 
 export const generalHelp = async (message: Message): Promise<void> => {
-    const helpText: Array<string> = ["!<prefix> <command>"];
-
-    commandArray.forEach((commandObject: CommandInterface): void => {
-        helpText.push(`${commandObject.command}: ${commandObject.description}`);
-    });
-
-    await message.reply(helpText.join("\n\n"));
+    await message.reply(
+        `!<prefix> <command>\n\n${commandArray
+            .map((commandObject: CommandInterface): string => {
+                return `${commandObject.command}: ${commandObject.description}`;
+            })
+            .join("\n\n")}`
+    );
 };
 
 export const generalTest = async (message: Message, client: Client): Promise<void> => {
