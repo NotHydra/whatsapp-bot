@@ -12,6 +12,7 @@ import { groupOperatorShow, groupOperatorAdd, groupOperatorRemove } from "./comm
 import { groupPrefixAdd, groupPrefixRemove, groupPrefixShow } from "./command/group/prefix";
 import { groupMessagePublicAdd, groupMessagePublicRemove, groupMessagePublicShow } from "./command/group/message/public";
 import { groupMessagePrivateActive, groupMessagePrivateChange, groupMessagePrivateShow } from "./command/group/message/private";
+import { groupBroadcast } from "./command/group/broadcast";
 
 import { GroupInterface } from "./common/interface/model/group";
 import { GroupNotificationExtended } from "./common/interface/group-notification";
@@ -139,6 +140,12 @@ client.on("message", async (message: Message): Promise<void> => {
 
                                     groupMessagePrivateChange(message, splittedMessage);
                                 }
+                            }
+                        } else if (splittedMessage[2] == "broadcast") {
+                            if (splittedMessage.length >= 4) {
+                                developmentLog("Message (Group Broadcast)");
+
+                                groupBroadcast(client, message, splittedMessage);
                             }
                         }
                     }
