@@ -14,4 +14,6 @@ export const groupBroadcast = async (client: Client, message: Message, splittedM
     chat.participants.map(async (participantObject: GroupParticipant): Promise<void> => {
         await client.sendMessage(participantObject.id._serialized, newMessage);
     });
+
+    await message.reply("Message Broadcasted");
 };
